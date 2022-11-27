@@ -1,0 +1,5 @@
+*.log
+.git/
+.idea/
+__pycache__/
+Pipfile.lock
