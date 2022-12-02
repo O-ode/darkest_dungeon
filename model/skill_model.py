@@ -1,6 +1,4 @@
-from pprint import pformat
-
-from constants import Range
+from constants import Range, pretty
 from model.effect_model import EffectModel
 
 
@@ -15,15 +13,15 @@ class SkillModel:
         self.dmg_mod: float = dmg_mod
         self.acc: int = acc
         self.crit_mod: float = crit_mod
-        self.effects: [EffectModel] = effects
+        self.effects: {str: list[EffectModel]} = effects
         self.on_self: [EffectModel] = on_self
         self.heal: str = heal
 
     def __repr__(self):
-        return pformat(self.__dict__)
+        return pretty(self.__dict__)
 
     def __str__(self):
-        return pformat(self.__dict__)
+        return pretty(self.__dict__)
 
     def __hash__(self):
         return hash(self.skill_name)

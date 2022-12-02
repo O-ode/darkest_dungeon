@@ -1,7 +1,7 @@
-from pprint import pformat
+from constants import pretty
 
 
-class CharacterLevelModel:
+class CharacterStatModel:
 
     def __init__(self, max_hp, dodge, prot, spd, acc_mod, crit, dmg):
         self.max_hp: int = max_hp
@@ -13,7 +13,7 @@ class CharacterLevelModel:
         self.dmg: str = dmg
 
     def __str__(self):
-        return pformat(self.__dict__)
+        return pretty(self.__dict__)
 
     def __repr__(self):
-        return pformat(self.__dict__)
+        return pretty(self.__dict__)
