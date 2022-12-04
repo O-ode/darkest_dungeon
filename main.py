@@ -10,8 +10,9 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 
-from character_functions import SeleniumCharacterManager
 from constants import pretty
+from factories.hero_level_attributes import HeroResolveLevelAttributes, HeroResolveLevelAttributesFactory
+from selenium_local.selenium_character_manager import SeleniumCharacterManager
 
 
 # def get_classes():
@@ -72,18 +73,26 @@ if __name__ == '__main__':
     try:
         seleniumCharacterManager = SeleniumCharacterManager(driver, wait)
         characters = [c for c in seleniumCharacterManager.get_characters()]
-        seleniumCharacterManager.fetch_characters_details(characters)
 
-        logger.info(f'Character list:')
         for c in characters:
-            n_skills = len(c.skills)
-            logger.info(f'{c.name} with {n_skills} skills:\n{pretty(c)}')
-            assert n_skills >= 7
+            logger.info(f"Getting stats for character: {c.name}")
+            for i, transformed_attrs in enumerate(seleniumCharacterManager.get_transformed_resolve_level_attributes(), start=1):
+                hero_resolve_level_attributes = [HeroResolveLevelAttributes(HeroResolveLevelAttributesFactory())
+                                                 .get_values(resolve_level=resolve_level, **attributes_dict)
+                                                 for resolve_level, attributes_dict in transformed_attrs.items()]
+                logger.info(pretty(hero_resolve_level_attributes))
+
+        # seleniumCharacterManager.fetch_characters_details()
+
+        # logger.info(f'Character list:')
+        # for c in characters:
+        #     n_skills = len(c.skills)
+        #     logger.info(f'{c.name} with {n_skills} skills:\n{pretty(c)}')
+        #     assert n_skills >= 7
 
     except:
         logger.error(traceback.format_exc())
         driver.quit()
-        sleep(30)
         exit(1)
 
     driver.quit()

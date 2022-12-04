@@ -14,6 +14,7 @@ range_regex = re.compile(r'(\d+)-(\d+)', re.I)
 range_values_regex = re.compile(r'(Melee|Ranged)', re.I)
 skill_attributes_regex = re.compile(r'(Range|Rank|Target|Damage|Accuracy|Crit\s+mod|Effect|Self|Heal)', re.I)
 skip_regex = re.compile(r'(Expand|Further\s*levels)', re.I)
+resolve_level_attributes_regex = re.compile(r"(MAX\s*HP|DODGE|PROT|SPD|ACC\s*MOD|CRIT|DMG)", re.I)
 
 classes = [value for name, value in inspect.getmembers(sys.modules[__name__], inspect.isclass)]
 

@@ -1,4 +1,3 @@
-from constants import pretty
 from model.character_stat_model import CharacterStatModel
 from model.other_information_model import OtherInformationModel
 from model.resistance_stat_model import ResistanceStatModel
