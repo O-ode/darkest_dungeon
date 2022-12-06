@@ -1,65 +1,51 @@
-from abc import ABC, abstractmethod
+from abc import ABC
 from typing import Any
 
 from constants import pretty
+from factories.attribute_base import AttributeBase
 from selenium_local.text_modifying_functions import text_to_int, text_to_float_div_100
 
 
-class AttributeBase(ABC):
-    value: Any
-
-    def __repr__(self):
-        return pretty(self.__dict__)
-
-
 class HP(AttributeBase):
-    value: int
-
-    def __init__(self, value: str):
-        self.value = text_to_int(value)
+    pass
 
 
 class Dodge(AttributeBase):
-    value: float
-
-    def __init__(self, value: str):
-        self.value = text_to_float_div_100(value)
+    pass
 
 
 class Prot(AttributeBase):
-    value: float
-
-    def __init__(self, value: str):
-        self.value = text_to_float_div_100(value)
+    pass
 
 
 class Spd(AttributeBase):
-    value: int
-
-    def __init__(self, value: str):
-        self.value = text_to_int(value)
+    pass
 
 
-class BaseLevelAttributes:
+class BaseLevelAttributes(ABC):
     hp: HP
     dodge: Dodge
     prot: Prot
     spd: Spd
 
+    def __repr__(self):
+        values_str = '\n\t'.join([pretty(v) for v in self.__dict__.values()])
+        return f'{self.__class__.__name__}{{{values_str}\n}}'
+
 
 class BaseLevelAttributesFactory(ABC):
-    @abstractmethod
-    def get_hp(self, value: str) -> HP:
-        pass
+    @classmethod
+    def set_hp(cls, value: str) -> HP:
+        return HP(text_to_int(value))
 
-    @abstractmethod
-    def get_dodge(self, value: str) -> Dodge:
-        pass
+    @classmethod
+    def set_dodge(cls, value: str) -> Dodge:
+        return Dodge(text_to_float_div_100(value))
 
-    @abstractmethod
-    def get_prot(self, value: str) -> Prot:
-        pass
+    @classmethod
+    def set_prot(cls, value: str) -> Prot:
+        return Prot(text_to_float_div_100(value))
 
-    @abstractmethod
-    def get_spd(self, value: str) -> Spd:
-        pass
+    @classmethod
+    def set_spd(cls, value: str) -> Spd:
+        return Spd(text_to_int(value))

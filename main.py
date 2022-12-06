@@ -2,7 +2,7 @@ import datetime
 import logging
 import os.path
 import traceback
-from time import sleep
+from pathlib import Path
 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -52,23 +52,23 @@ def setup_logger():
     # log all messages, debug and up
     return logger
 
-
-def setup_driver():
-    options = webdriver.ChromeOptions()
-    options.add_argument("headless")
-    options.add_argument('log-level=3')
-    service = Service(ChromeDriverManager(path=r"C:\Users\edu_a\.virtualenvs\darkest_dungeon-IEFPBDCG\src").install())
-    _driver = webdriver.Chrome(service=service, options=options)
-
-    _wait = WebDriverWait(_driver, 10)
-    _actions = ActionChains(_driver)
-    return _driver, _wait, _actions
+#
+# def setup_driver():
+#     options = webdriver.ChromeOptions()
+#     options.add_argument("headless")
+#     options.add_argument('log-level=3')
+#     service = Service(ChromeDriverManager(path=fr"{Path.home()}\.virtualenvs\darkest_dungeon-k9hrbMGS\src").install())
+#     _driver = webdriver.Chrome(service=service, options=options)
+#
+#     _wait = WebDriverWait(_driver, 10)
+#     _actions = ActionChains(_driver)
+#     return _driver, _wait, _actions
 
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     logger = setup_logger()
-    driver, wait, actions = setup_driver()
+    # driver, wait, actions = setup_driver()
 
     try:
         seleniumCharacterManager = SeleniumCharacterManager(driver, wait)
@@ -78,7 +78,7 @@ if __name__ == '__main__':
             logger.info(f"Getting stats for character: {c.name}")
             for i, transformed_attrs in enumerate(seleniumCharacterManager.get_transformed_resolve_level_attributes(), start=1):
                 hero_resolve_level_attributes = [HeroResolveLevelAttributes(HeroResolveLevelAttributesFactory())
-                                                 .get_values(resolve_level=resolve_level, **attributes_dict)
+                                                 .set_values(resolve_level=resolve_level, **attributes_dict)
                                                  for resolve_level, attributes_dict in transformed_attrs.items()]
                 logger.info(pretty(hero_resolve_level_attributes))
 
