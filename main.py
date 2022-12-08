@@ -2,17 +2,10 @@ import datetime
 import logging
 import os.path
 import traceback
-from pathlib import Path
 
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.support.ui import WebDriverWait
-from webdriver_manager.chrome import ChromeDriverManager
-
-from constants import pretty
-from factories.hero_level_attributes import HeroResolveLevelAttributes, HeroResolveLevelAttributesFactory
-from selenium_local.selenium_character_manager import SeleniumCharacterManager
+from driver_singleton import DriverSingleton
+from repos.daos.selenium_dao import SeleniumDAO
+from repos.heroes_repo import HeroesRepo
 
 
 # def get_classes():
@@ -33,7 +26,7 @@ from selenium_local.selenium_character_manager import SeleniumCharacterManager
 
 def setup_logger():
     # get the multiprocessing logger
-    logger = logging.getLogger()
+    _logger = logging.getLogger()
     # configure a stream handler
     formatter = logging.Formatter("[%(asctime)s:%(levelname)7s:%(filename)s:%(lineno)s:%(funcName)s()] %(message)s")
 
@@ -42,15 +35,15 @@ def setup_logger():
                                        encoding='utf-8')
     file_handler.setFormatter(formatter)
     file_handler.setLevel(logging.INFO)
-    logger.addHandler(file_handler)
+    _logger.addHandler(file_handler)
 
     console_handler = logging.StreamHandler()
     console_handler.setFormatter(formatter)
     console_handler.setLevel(logging.INFO)
-    logger.addHandler(console_handler)
-    logger.setLevel(logging.DEBUG)
+    _logger.addHandler(console_handler)
+    _logger.setLevel(logging.DEBUG)
     # log all messages, debug and up
-    return logger
+    return _logger
 
 #
 # def setup_driver():
@@ -71,18 +64,13 @@ if __name__ == '__main__':
     # driver, wait, actions = setup_driver()
 
     try:
-        seleniumCharacterManager = SeleniumCharacterManager(driver, wait)
-        characters = [c for c in seleniumCharacterManager.get_characters()]
+        SeleniumDAO.init()
 
-        for c in characters:
-            logger.info(f"Getting stats for character: {c.name}")
-            for i, transformed_attrs in enumerate(seleniumCharacterManager.get_transformed_resolve_level_attributes(), start=1):
-                hero_resolve_level_attributes = [HeroResolveLevelAttributes(HeroResolveLevelAttributesFactory())
-                                                 .set_values(resolve_level=resolve_level, **attributes_dict)
-                                                 for resolve_level, attributes_dict in transformed_attrs.items()]
-                logger.info(pretty(hero_resolve_level_attributes))
-
-        # seleniumCharacterManager.fetch_characters_details()
+        for hero in HeroesRepo.get_heroes():
+            HeroesRepo.add_resolve_level_attributes_to_hero(hero)\
+                .add_resistances_to_hero(hero)\
+                .add_other_info_to_hero(hero)
+            logger.info(hero)
 
         # logger.info(f'Character list:')
         # for c in characters:
@@ -92,8 +80,8 @@ if __name__ == '__main__':
 
     except:
         logger.error(traceback.format_exc())
-        driver.quit()
+        DriverSingleton.close()
         exit(1)
 
-    driver.quit()
+    DriverSingleton.close()
     exit(0)

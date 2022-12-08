@@ -1,24 +1,23 @@
 from abc import ABC
-from typing import Any
 
 from constants import pretty
-from factories.attribute_base import AttributeBase
+from factories.attribute_base import BasicAttribute
 from selenium_local.text_modifying_functions import text_to_int, text_to_float_div_100
 
 
-class HP(AttributeBase):
+class HP(BasicAttribute):
     pass
 
 
-class Dodge(AttributeBase):
+class Dodge(BasicAttribute):
     pass
 
 
-class Prot(AttributeBase):
+class Prot(BasicAttribute):
     pass
 
 
-class Spd(AttributeBase):
+class Spd(BasicAttribute):
     pass
 
 
@@ -27,10 +26,6 @@ class BaseLevelAttributes(ABC):
     dodge: Dodge
     prot: Prot
     spd: Spd
-
-    def __repr__(self):
-        values_str = '\n\t'.join([pretty(v) for v in self.__dict__.values()])
-        return f'{self.__class__.__name__}{{{values_str}\n}}'
 
 
 class BaseLevelAttributesFactory(ABC):
@@ -49,3 +44,7 @@ class BaseLevelAttributesFactory(ABC):
     @classmethod
     def set_spd(cls, value: str) -> Spd:
         return Spd(text_to_int(value))
+
+
+    def __repr__(self):
+        return f'{self.__class__.__name__}:\n{pretty(self.__dict__)}'

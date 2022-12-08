@@ -1,77 +1,84 @@
-from factories.attribute_base import AttributeBase
+from abc import ABC
+
+from constants import pretty
+from factories.attribute_base import BasicAttribute
 from selenium_local.text_modifying_functions import text_to_float_div_100
 
 
-class Stun(AttributeBase):
+class ResistanceBase(BasicAttribute):
     pass
 
 
-class Move(AttributeBase):
+class Stun(ResistanceBase):
     pass
 
 
-class Blight(AttributeBase):
+class Move(ResistanceBase):
     pass
 
 
-class Bleed(AttributeBase):
+class Blight(ResistanceBase):
     pass
 
 
-class Disease(AttributeBase):
+class Bleed(ResistanceBase):
     pass
 
 
-class Debuff(AttributeBase):
+class Disease(ResistanceBase):
     pass
 
 
-class DeathBlow(AttributeBase):
+class Debuff(ResistanceBase):
     pass
 
 
-class Trap(AttributeBase):
+class DeathBlow(ResistanceBase):
     pass
 
 
-class HeroResistancesFactory:
+class Trap(ResistanceBase):
+    pass
+
+
+class ResistancesFactory(ABC):
 
     @classmethod
-    def set_stun(cls, value: str) -> Stun:
+    def get_stun(cls, value: str) -> Stun:
         return Stun(text_to_float_div_100(value))
 
     @classmethod
-    def set_move(cls, value: str) -> Move:
+    def get_move(cls, value: str) -> Move:
         return Move(text_to_float_div_100(value))
 
     @classmethod
-    def set_blight(cls, value: str) -> Blight:
+    def get_blight(cls, value: str) -> Blight:
         return Blight(text_to_float_div_100(value))
 
     @classmethod
-    def set_bleed(cls, value: str) -> Bleed:
+    def get_bleed(cls, value: str) -> Bleed:
         return Bleed(text_to_float_div_100(value))
 
     @classmethod
-    def set_disease(cls, value: str) -> Disease:
+    def get_disease(cls, value: str) -> Disease:
         return Disease(text_to_float_div_100(value))
 
     @classmethod
-    def set_debuff(cls, value: str) -> Debuff:
+    def get_debuff(cls, value: str) -> Debuff:
         return Debuff(text_to_float_div_100(value))
 
     @classmethod
-    def set_death_blow(cls, value: str) -> DeathBlow:
+    def get_death_blow(cls, value: str) -> DeathBlow:
         return DeathBlow(text_to_float_div_100(value))
 
     @classmethod
-    def set_trap(cls, value: str) -> Trap:
+    def get_trap(cls, value: str) -> Trap:
         return Trap(text_to_float_div_100(value))
 
 
-class HeroResistances:
+class HeroResistanceModel:
 
-    def __init__(self, factory: HeroResistancesFactory):
+    def __init__(self, factory):
         self.factory = factory
         self.stun: Stun or None = None
         self.move: Move or None = None
@@ -84,12 +91,15 @@ class HeroResistances:
 
     def set_values(self, stun=None, move=None, blight=None, bleed=None,
                    disease=None, debuff=None, death_blow=None, trap=None):
-        self.stun = self.factory.set_stun(stun)
-        self.move = self.factory.set_move(move)
-        self.blight = self.factory.set_blight(blight)
-        self.bleed = self.factory.set_bleed(bleed)
-        self.disease = self.factory.set_disease(disease)
-        self.debuff = self.factory.set_debuff(debuff)
-        self.death_blow = self.factory.set_death_blow(death_blow)
-        self.trap = self.factory.set_trap(trap)
+        self.stun = self.factory.get_stun(stun)
+        self.move = self.factory.get_move(move)
+        self.blight = self.factory.get_blight(blight)
+        self.bleed = self.factory.get_bleed(bleed)
+        self.disease = self.factory.get_disease(disease)
+        self.debuff = self.factory.get_debuff(debuff)
+        self.death_blow = self.factory.get_death_blow(death_blow)
+        self.trap = self.factory.get_trap(trap)
         return self
+
+    def __repr__(self):
+        return f'{self.__class__.__name__}:\n{pretty(self.__dict__)}'

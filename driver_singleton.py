@@ -14,9 +14,12 @@ class DriverSingleton:
 
     @classmethod
     def init(cls):
-        if cls.__driver is None:
-            cls.__driver, cls.__wait, cls.__actions = cls.setup_driver()
+        cls.__driver, cls.__wait, cls.__actions = cls.setup_driver()
         return cls
+
+    @classmethod
+    def close(cls):
+        cls.__driver.close()
 
     @classmethod
     def get_driver(cls):

@@ -8,10 +8,10 @@ from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
 
 from constants import pretty, skill_attributes_regex, skip_regex, resolve_level_attributes_regex
-from model.character_model import CharacterModel
+from model.hero_model import HeroModel
 from model.kwargs import skill_kwargs
 from model.skill_model import SkillModel
-from selenium_local.value_retrieving_functions import value_from_innerText
+from selenium_local.value_retrieving_functions import str_from_inner_text
 
 logger = logging.getLogger()
 
@@ -21,7 +21,7 @@ class SeleniumCharacterManager:
     def __init__(self, driver, wait):
         self.driver = driver
         self.wait = wait
-        self.characters: [CharacterModel] = []
+        self.characters: [HeroModel] = []
 
     def get_characters(self):
         self.driver.get("https://darkestdungeon.fandom.com/wiki/Heroes_(Darkest_Dungeon)")
@@ -42,7 +42,7 @@ class SeleniumCharacterManager:
             section = self.driver.find_element(By.CSS_SELECTOR, s_name)
             for el in section.find_elements(By.CSS_SELECTOR, 'li[class*="toclevel-2"]'):
                 name = re.search(r"[a-zA-Z\s-]*$", el.get_attribute("innerText")).group().lstrip()
-                self.characters.append(CharacterModel(name))
+                self.characters.append(HeroModel(name))
 
         self.characters = [c for c in self.characters[::-1]]
         logger.info(f'Character list:\n{pretty([_character.name for _character in self.characters])}')
@@ -88,7 +88,7 @@ class SeleniumCharacterManager:
                 continue
 
             for i, col in enumerate(titles_row.find_elements(By.CSS_SELECTOR, 'td')[1:], start=1):
-                skill_attribute_name = value_from_innerText(col)
+                skill_attribute_name = str_from_inner_text(col)
                 logger.info(skill_attribute_name)
                 skill_attribute_name = skill_attributes_regex.search(skill_attribute_name).group()
                 skill_attribute_name, value_obtaining_function, value_modifying_function = \
@@ -139,7 +139,7 @@ class SeleniumCharacterManager:
         lvl_attribute_name = re.sub(r'\s+', '_', lvl_attribute_name).lower()
         return lvl_attribute_name
 
-    def _hero_level_raw_values_from_innerText(self, row: WebElement) -> list[str]:
+    def _hero_level_raw_values_from_inner_text(self, row: WebElement) -> list[str]:
         return [unicodedata.normalize('NFKD', cell.get_attribute("innerText"))
                 for cell in row.find_elements(By.CSS_SELECTOR, f'td')[1:]]
 
@@ -148,7 +148,7 @@ class SeleniumCharacterManager:
         for row in character_table.find_elements(By.CSS_SELECTOR, f'tr')[4:11]:
             attribute_name = self._get_resolve_level_attribute_name(row)
             # attribute_class_tuple = self.str_self_dict[attribute_name]
-            values = self._hero_level_raw_values_from_innerText(row)
+            values = self._hero_level_raw_values_from_inner_text(row)
             raw_attributes[attribute_name] = values
         return raw_attributes
 
@@ -158,17 +158,6 @@ class SeleniumCharacterManager:
             for i, value in enumerate(values, start=1):
                 transformed_attrs[i].update({attribute_name: value})
         return transformed_attrs
-
-    def get_transformed_resolve_level_attributes(self):
-        for character in self.characters:
-            parsed = re.sub(r' ', '_', character.name)
-            url = f'https://darkestdungeon.fandom.com/wiki/{parsed}'
-            self.driver.get(url)
-            character_table = self.wait.until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, f'.charactertable > tbody:nth-child(1)')))
-
-            raw_attributes = self._get_hero_resolve_level_raw_attributes(character_table)
-            yield self._transform_raw_resolve_level_attributes(raw_attributes)
 
     # def fetch_hero_resolve_level_raw_details(self):
     #     for character in self.characters:

@@ -2,7 +2,7 @@ from constants import damage_regex, range_regex, flags_for_effect_regex
 from model.effect_model import EffectModel
 
 
-def dont_modify(obj):
+def do_nothing(obj):
     return obj
 
 

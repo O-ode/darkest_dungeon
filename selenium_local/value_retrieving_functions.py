@@ -13,7 +13,7 @@ logger = logging.getLogger()
 
 def value_from_dots(value: WebElement):
     try:
-        r_value = value_from_innerText(value)
+        r_value = str_from_inner_text(value)
         if r_value != '':
             logger.info(f'Returning text instead of dots: {r_value}')
             return r_value
@@ -34,19 +34,22 @@ def value_from_dots(value: WebElement):
     return list(gen_from_dots())
 
 
-def find_element_and_get_str_from_innerText(root_element: WebElement, css_selector: str, r_string: str):
-    s = root_element.find_element(By.CSS_SELECTOR, css_selector).get_attribute("innerText")
-    s = unicodedata.normalize('NFKD', s)
-    s = re.sub(r'\s+', '_', s).lower()
-    s = re.search(r_string, s, re.I).group()
-    return s
-
-
-
-def value_from_innerText(element: WebElement):
+def str_from_inner_text(element: WebElement):
     return unicodedata.normalize('NFKD', element.get_attribute('innerText'))
 
 
-def character_level_values_from_innerText(row: WebElement):
-    return [cell.get_attribute("innerText") for cell in
-            row.find_elements(By.CSS_SELECTOR, f'td')[1:]]
+def str_underscored_lower_from_inner_text(element: WebElement):
+    return re.sub(r"\s+", "_",
+                  unicodedata.normalize('NFKD', element.get_attribute('innerText')).lower().lstrip().rstrip()
+                  )
+
+
+def str_matched_underscored_lower_from_inner_text(element: WebElement, r: re.Pattern):
+    s = re.sub(r"\s+", "_",
+               unicodedata.normalize('NFKD', element.get_attribute('innerText')).lower().lstrip().rstrip()
+               )
+    try:
+        return r.search(s).group()
+    except:
+        logger.error(f'Did\'nt find regex {repr(r)} in str {s}')
+        raise
