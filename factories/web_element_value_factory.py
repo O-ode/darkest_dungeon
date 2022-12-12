@@ -6,12 +6,12 @@ import unicodedata
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 
-from constants import colored_dots_regex
+from constants import colored_dots_regex, PositionFlag
 
 logger = logging.getLogger()
 
 
-def value_from_dots(value: WebElement):
+def value_from_dots(value: WebElement) -> PositionFlag or str:
     try:
         r_value = str_from_inner_text(value)
         if r_value != '':
@@ -23,7 +23,7 @@ def value_from_dots(value: WebElement):
     def gen_from_dots():
         # table.wikitable: nth - child(15) > tbody:nth - child(1) > tr: nth - child(3) > td:nth - child(
         #     2) > div: nth - child(1) > img:nth - child(3)
-        for j, dot in enumerate(value.find_elements(By.CSS_SELECTOR, f'div img'), start=1):
+        for j, dot in enumerate(value.find_elements(By.CSS_SELECTOR, f'div img')):
             temp = dot.get_attribute('alt')
             temp = unicodedata.normalize('NFKD', temp)
             if colored_dots_regex.search(temp) is not None:
@@ -31,7 +31,13 @@ def value_from_dots(value: WebElement):
             else:
                 continue
 
-    return list(gen_from_dots())
+    gen = gen_from_dots()
+    positions = list(PositionFlag)
+    position_flag = PositionFlag(positions[next(gen)])
+    for position in gen:
+        position_flag = position_flag | positions[position]
+
+    return position_flag
 
 
 def str_from_inner_text(element: WebElement):
