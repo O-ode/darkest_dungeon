@@ -3,8 +3,9 @@ import logging
 import os.path
 import traceback
 
+from selenium.common import WebDriverException
+
 from driver_singleton import DriverSingleton
-from repos.daos.selenium_dao import SeleniumDAO
 from repos.heroes_repo import HeroesRepo
 
 
@@ -31,7 +32,7 @@ def setup_logger():
     formatter = logging.Formatter("[%(asctime)s:%(levelname)7s:%(filename)s:%(lineno)s:%(funcName)s()] %(message)s")
 
     file_handler = logging.FileHandler(os.path.join(os.getcwd(),
-                                                    f'log_{datetime.datetime.now().strftime("%d_%b_%y_%H_%M_%S")}.log'),
+                                                    f'log_{datetime.datetime.now().strftime("%d_%b_%Y_%H_%M_%S")}.log'),
                                        encoding='utf-8')
     file_handler.setFormatter(formatter)
     file_handler.setLevel(logging.INFO)
@@ -44,6 +45,7 @@ def setup_logger():
     _logger.setLevel(logging.DEBUG)
     # log all messages, debug and up
     return _logger
+
 
 #
 # def setup_driver():
@@ -64,13 +66,22 @@ if __name__ == '__main__':
     # driver, wait, actions = setup_driver()
 
     try:
-        SeleniumDAO.init()
-
-        for hero in HeroesRepo.get_heroes():
-            HeroesRepo.add_resolve_level_attributes_to_hero(hero)\
-                .add_resistances_to_hero(hero)\
-                .add_other_info_to_hero(hero)
-            logger.info(hero)
+        for i, hero in enumerate(HeroesRepo.get_heroes(), start=1):
+            logger.info(f'Hero nª {i}: {hero.name}')
+            try:
+                HeroesRepo.add_level_attributes_to_hero(hero) \
+                    .add_resistances_to_hero(hero) \
+                    .add_other_info_to_hero(hero) \
+                    .add_skills_to_hero(hero)
+                logger.info(hero)
+            except WebDriverException as wde:
+                logger.error(traceback.format_exc())
+                logger.error(wde)
+                if wde.screen:
+                    logger.error(wde.screen)
+                    with open(f'error_{i:03}', 'w') as screenshot:
+                        pass
+                        # screenshot.write(wde.screen)
 
         # logger.info(f'Character list:')
         # for c in characters:
@@ -80,7 +91,8 @@ if __name__ == '__main__':
 
     except:
         logger.error(traceback.format_exc())
-        DriverSingleton.close()
+        DriverSingleton.get_driver().get_screenshot_as_file('lolmao.png')
+        DriverSingleton.close(wait=True)
         exit(1)
 
     DriverSingleton.close()

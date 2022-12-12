@@ -17,8 +17,8 @@ CREATE TABLE IF NOT EXISTS "Character" (
 	"provisions"	TEXT,
 	PRIMARY KEY("id")
 );
-DROP TABLE IF EXISTS "CharacterResolveLevels";
-CREATE TABLE IF NOT EXISTS "CharacterResolveLevels" (
+DROP TABLE IF EXISTS "CharacterlevelLevels";
+CREATE TABLE IF NOT EXISTS "CharacterlevelLevels" (
 	"id"	INTEGER NOT NULL UNIQUE,
 	"character_id"	INTEGER NOT NULL,
 	"level"	INTEGER NOT NULL,

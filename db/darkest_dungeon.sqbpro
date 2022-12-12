@@ -1,18 +1,35 @@
-<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:\Users\edu_a\PycharmProjects\darkest_dungeon\darkest_dungeon.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="1"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="2656"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="4,14:mainCharacterLevel"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="Character" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="78"/><column index="2" value="40"/><column index="3" value="44"/><column index="4" value="57"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="CharacterLevel" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="40"/><column index="2" value="91"/><column index="3" value="40"/><column index="4" value="58"/><column index="5" value="48"/><column index="6" value="40"/><column index="7" value="40"/><column index="8" value="65"/><column index="9" value="40"/><column index="10" value="40"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="CharacterResolveLevels" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="40"/><column index="2" value="115"/><column index="3" value="40"/><column index="4" value="58"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="CharacterSkill" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="40"/><column index="2" value="91"/><column index="3" value="43"/><column index="4" value="70"/><column index="5" value="40"/><column index="6" value="50"/><column index="7" value="70"/><column index="8" value="40"/><column index="9" value="65"/><column index="10" value="40"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="sqlite_sequence" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="142"/><column index="2" value="40"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="SQL 1">DROP TABLE Character;
-CREATE TABLE &quot;Character&quot; (
-	&quot;id&quot;	INTEGER NOT NULL UNIQUE,
-	&quot;name&quot;	TEXT NOT NULL,
-	&quot;bleed&quot;	REAL NOT NULL,
-	&quot;blight&quot;	REAL NOT NULL,
-	&quot;debuff&quot;	REAL NOT NULL,
-	&quot;death_blow&quot;	REAL NOT NULL,
-	&quot;disease&quot;	REAL NOT NULL,
-	&quot;move&quot;	REAL NOT NULL,
-	&quot;stun&quot;	REAL NOT NULL,
-	&quot;trap&quot;	REAL NOT NULL,
-	&quot;movement&quot;	TEXT NOT NULL,
-	&quot;crit_buff_bonus&quot;	TEXT NOT NULL,
-	&quot;religious&quot;	INTEGER NOT NULL,
-	&quot;provisions&quot;	TEXT,
-	PRIMARY KEY(&quot;id&quot;)
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:\Users\edu_a\PycharmProjects\darkest_dungeon\darkest_dungeon.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="1"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="2656"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="4,14:mainCharacterLevel"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="Character" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="78"/><column index="2" value="40"/><column index="3" value="44"/><column index="4" value="57"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="CharacterLevel" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="40"/><column index="2" value="91"/><column index="3" value="40"/><column index="4" value="58"/><column index="5" value="48"/><column index="6" value="40"/><column index="7" value="40"/><column index="8" value="65"/><column index="9" value="40"/><column index="10" value="40"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="CharacterlevelLevels" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="40"/><column index="2" value="115"/><column index="3" value="40"/><column index="4" value="58"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="CharacterSkill" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="40"/><column index="2" value="91"/><column index="3" value="43"/><column index="4" value="70"/><column index="5" value="40"/><column index="6" value="50"/><column index="7" value="70"/><column index="8" value="40"/><column index="9" value="65"/><column index="10" value="40"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="sqlite_sequence" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_"><sort/><column_widths><column index="1" value="142"/><column index="2" value="40"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="SQL 1">DROP TABLE Character;
+
+CREATE TABLE &quot;Character&quot; (
+
+	&quot;id&quot;	INTEGER NOT NULL UNIQUE,
+
+	&quot;name&quot;	TEXT NOT NULL,
+
+	&quot;bleed&quot;	REAL NOT NULL,
+
+	&quot;blight&quot;	REAL NOT NULL,
+
+	&quot;debuff&quot;	REAL NOT NULL,
+
+	&quot;death_blow&quot;	REAL NOT NULL,
+
+	&quot;disease&quot;	REAL NOT NULL,
+
+	&quot;move&quot;	REAL NOT NULL,
+
+	&quot;stun&quot;	REAL NOT NULL,
+
+	&quot;trap&quot;	REAL NOT NULL,
+
+	&quot;movement&quot;	TEXT NOT NULL,
+
+	&quot;crit_buff_bonus&quot;	TEXT NOT NULL,
+
+	&quot;religious&quot;	INTEGER NOT NULL,
+
+	&quot;provisions&quot;	TEXT,
+
+	PRIMARY KEY(&quot;id&quot;)
+
 );</sql><sql name="SQL 2">INSERT INTO &quot;Character&quot; (&quot;id&quot;,&quot;name&quot;,&quot;bleed&quot;,&quot;blight&quot;,&quot;debuff&quot;,&quot;death_blow&quot;,&quot;disease&quot;,&quot;move&quot;,&quot;stun&quot;,&quot;trap&quot;,&quot;movement&quot;,&quot;crit_buff_bonus&quot;,&quot;religious&quot;,&quot;provisions&quot;) VALUES (1,'ADSF',1.0,11.0,1.0,1.0,1.0,1.0,1.0,1.0,'1','1',1,NULL), (2,'2',2.0,2.0,2.0,2.0,2.0,2.0,2.0,2.0,'0','2',0,'');</sql><current_tab id="1"/></tab_sql></sqlb_project>

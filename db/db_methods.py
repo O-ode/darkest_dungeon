@@ -15,17 +15,17 @@ class DBManager:
     def get_db_con_cursor(self):
         return self.con, self.cur
 
-    def insert_into_table(self, table_name: str, attributes: tuple, values_list: [tuple]):
+    def insert_into_table(self, table_name: str, attributes: tuple, values: list[tuple]):
         logger.info(pretty(table_name))
         logger.info(pretty(attributes))
-        logger.info(pretty(values_list))
+        logger.info(pretty(values))
         query = f'BEGIN TRANSACTION;' \
                 f'INSERT INTO "{table_name}"('
 
         col_names = [f'"{attribute}"' for attribute in attributes]
         query += ','.join(col_names) + f') VALUES ('
 
-        for values in iter(values_list):
+        for values in iter(values):
             values_for_entity = []
             for value in iter(values):
                 new_value = value

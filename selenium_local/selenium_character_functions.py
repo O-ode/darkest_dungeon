@@ -29,12 +29,13 @@
 #         yield resistance_name, resistance_value
 #
 #
-# # def _get_resolve_lvl_attribute(row: WebElement):
-# #     logger.info(f'Getting resolve level values')
+# # def _get_level_lvl_attribute(row: WebElement):
+# #     logger.info(f'Getting level level values')
 # #     lvl_attribute_name = unicodedata.normalize('NFKD',
 # #                                           row.find_element(By.CSS_SELECTOR, f'td:nth-child(1)')
 # #                                           .get_attribute("innerText"))
-# #     lvl_attribute_name = re.search(r"(MAX\s*HP|DODGE|PROT|SPD|ACC\s*MOD|CRIT|DMG)", lvl_attribute_name, re.I).group()
+# #     lvl_attribute_name =
+#           re.search(r"(MAX\s*HP|DODGE|PROT|SPD|ACC\s*MOD|CRIT|DMG)", lvl_attribute_name, re.I).group()
 # #     lvl_attribute_name = re.sub(r'\s+', '_', lvl_attribute_name).lower()
 # #     values_obtaining_function, value_modifying_function = \
 # #         character_level_kwargs[lvl_attribute_name]
