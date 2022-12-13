@@ -1,4 +1,4 @@
-from typing import Type, Any
+from typing import Any, Type
 
 from base_classes.skill_attributes import CritMod, Accuracy, DmgMod, Range, Heal, Limit, Effect
 from factories.hero_skill_factories import HeroSkillFactory
@@ -16,7 +16,7 @@ class HeroBaseSkill(BaseSkill):
         return self
 
     def set_on_other_heroes(self, values: list[Any]):
-        self._on_other_heroes = self._factory.prepare_on_other_heroes(value)
+        self._on_other_heroes = self._factory.prepare_on_other_heroes(values)
         return self
 
     def get_limit(self):
@@ -37,7 +37,7 @@ class HeroHealSkill(HeroBaseSkill):
         self._heal: list[Heal] or None = None
 
     def set_heal(self, values: list[Any]):
-        self._heal = self._factory.prepare_heal(value)
+        self._heal = self._factory.prepare_heal(values)
         return self
 
     def get_heal(self):
@@ -57,15 +57,15 @@ class HeroOffensiveSkill(HeroBaseSkill):
         return self
 
     def set_dmg_mod(self, values: list[Any]):
-        self._dmg_mod = self._factory.prepare_dmg_mod(value)
+        self._dmg_mod = self._factory.prepare_dmg_mod(values)
         return self
 
     def set_acc(self, values: list[Any]):
-        self._acc = self._factory.prepare_acc(value)
+        self._acc = self._factory.prepare_acc(values)
         return self
 
     def set_crit_mod(self, values: list[Any]):
-        self._crit_mod = self._factory.prepare_crit_mod(value)
+        self._crit_mod = self._factory.prepare_crit_mod(values)
         return self
 
     def get_on_range(self):

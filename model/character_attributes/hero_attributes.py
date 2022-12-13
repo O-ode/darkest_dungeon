@@ -9,10 +9,10 @@ from factories.hero_attributes_factories import OtherHeroAttributesFactory
 from model.character_attributes.base_attributes import BaseLevelAttributesModel
 
 
-class HerolevelAttributesModel(BaseLevelAttributesModel):
+class HeroLevelAttributesModel(BaseLevelAttributesModel):
 
     def __init__(self, factory):
-        super(HerolevelAttributesModel, self).__init__(factory)
+        super(HeroLevelAttributesModel, self).__init__(factory)
         self._acc_mod: AccMod or None = None
         self._crit: Crit or None = None
         self._dmg: DmgRange or None = None

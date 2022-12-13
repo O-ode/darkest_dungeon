@@ -13,13 +13,36 @@ logger = logging.getLogger()
 
 
 class WebElementValueFactory:
+    @classmethod
+    def inverted_value_from_dots(cls, value: WebElement):
+        try:
+            r_value = cls.str_text_from_inner_text(value)
+            if re.search(r'self', r_value, re.I):
+                return [4]
+            elif r_value != '':
+                logger.error(f'Returning text instead of dots: {r_value}')
+                return r_value
+        except:
+            logger.error(traceback.print_exc())
+
+        positions = []
+
+        for j, dot in enumerate(reversed(value.find_elements(By.CSS_SELECTOR, f'div img'))):
+            temp = dot.get_attribute('alt')
+            temp = unicodedata.normalize('NFKD', temp)
+            if colored_dots_regex.search(temp) is not None:
+                positions.append(j)
+            else:
+                continue
+        assert len(positions) > 0
+        return positions
 
     @classmethod
     def value_from_dots(cls, value: WebElement):
         try:
             r_value = cls.str_text_from_inner_text(value)
             if re.search(r'self', r_value, re.I):
-                return [0]
+                return [4]
             elif r_value != '':
                 logger.error(f'Returning text instead of dots: {r_value}')
                 return r_value
@@ -40,9 +63,9 @@ class WebElementValueFactory:
     @classmethod
     def subdivide_hero_effects_from_inner_text(cls, element: WebElement):
         effects_str = cls.str_text_from_inner_text(element)
-        return itertools.zip_longest(
+        return {tup[0]: tup[1] for tup in itertools.zip_longest(
             ['on_target', 'on_other_heroes'], flags_for_effect_regex.split(effects_str), fillvalue=''
-        )
+        )}
 
     @classmethod
     def str_text_from_inner_text(cls, element: WebElement):

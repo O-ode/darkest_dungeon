@@ -1,4 +1,4 @@
-from typing import Type, Any
+from typing import Any, Type
 
 from base_classes.character_attributes import Crit
 from base_classes.skill_attributes import Accuracy, Dmg, Note, Range

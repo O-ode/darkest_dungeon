@@ -63,9 +63,11 @@ class ValueModifyingFactory:
     @classmethod
     def int_array_to_position_flag(cls, values: list[int]) -> PositionFlag:
         positions = list(PositionFlag)
-        position_flag = PositionFlag(positions[value[0]])
-        for position in value[1:]:
+        position_flag = PositionFlag(positions[values[0]])
+        logger.info(position_flag)
+        for position in values[1:]:
             position_flag = position_flag | positions[position]
+            logger.info(position_flag)
         return position_flag
 
     @classmethod
@@ -83,3 +85,12 @@ class ValueModifyingFactory:
             return cls.text_to_int_over_rounds(value)
         else:
             return cls.text_to_int(value)
+
+    @classmethod
+    def text_to_effect_list(cls, value: str):
+        effect_line_list = []
+        for v in re.split(r'\n', value):
+            p = v.replace('\n', '')
+            if p != '':
+                effect_line_list.append(Effect(p))
+        return effect_line_list

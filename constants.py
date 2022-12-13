@@ -7,7 +7,7 @@ stats = ["MAX HP", "DODGE", "PROT", "SPD", "ACC MOD", "CRIT", "DMG"]
 level_levels = [1, 2, 3, 4, 5]
 
 colored_dots_regex = re.compile(r'(Yellow|Red)\sdot.+png', re.I)
-percentage_regex = re.compile(r'([+\-]?\s*\d+)%?', re.I)
+percentage_regex = re.compile(r'([+\-]?\s*\d+)(\.\d+)?%?', re.I)
 flags_for_effect_regex = re.compile(r'Other\s+Heroes:', re.I)
 range_regex = re.compile(r'(\d+)\s*-\s*(\d+)', re.I)
 range_values_regex = re.compile(r'(Melee|Ranged)', re.I)
@@ -28,11 +28,11 @@ class Effects(Enum):
 
 # noinspection PyArgumentList
 class PositionFlag(IntFlag):
-    SELF = 0
     FIRST = auto()
     SECOND = auto()
     THIRD = auto()
     FOURTH = auto()
+    SELF = auto()
 
     def __repr__(self):
         return f'PositionFlag.{self.name}: {self.value}'

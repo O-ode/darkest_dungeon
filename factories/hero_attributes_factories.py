@@ -1,6 +1,6 @@
 from abc import ABC
 
-from base_classes.character_attributes import Crit, levelLevel, AccMod
+from base_classes.character_attributes import Crit, AccMod, Level
 from base_classes.int_range import DmgRange
 from base_classes.other_hero_attributes import Provisions, Religious, CritBuffBonus, Movement
 from base_classes.resistances import Trap, DeathBlow, Debuff, Disease, Bleed, Blight, Move, Stun
@@ -12,8 +12,8 @@ from factories.value_modifying_factory import ValueModifyingFactory
 class HerolevelAttributesFactory(BaseLevelAttributesFactory):
 
     @classmethod
-    def prepare_level(cls, value: str) -> levelLevel:
-        return levelLevel(ValueModifyingFactory.text_to_int(value))
+    def prepare_level(cls, value: str) -> Level:
+        return Level(ValueModifyingFactory.text_to_int(value))
 
     @classmethod
     def prepare_acc_mod(cls, value: str) -> AccMod:

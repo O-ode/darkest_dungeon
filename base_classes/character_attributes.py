@@ -25,9 +25,5 @@ class AccMod(BasicAttribute):
     pass
 
 
-class levelLevel(BasicAttribute):
-    pass
-
-
 class Level(BasicAttribute):
     pass

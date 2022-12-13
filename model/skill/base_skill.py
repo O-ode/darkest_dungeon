@@ -1,25 +1,19 @@
 from abc import ABC
-from typing import Type, Any
+from typing import Any, Type
 
-from base_classes.character_attributes import Level
 from base_classes.skill_attributes import Effect, Rank, SkillName, Target
 from constants import pretty
-from factories.hero_skill_factories import HeroSkillFactory
+from factories.type_vars import DerivedFromBaseSkillFactory
 
 
 class BaseSkill(ABC):
     def __init__(self, factory):
-        self._factory: Type[HeroSkillFactory] = factory
-        self._level: list[Level] or None = None
+        self._factory: Type[DerivedFromBaseSkillFactory] = factory
         self._skill_name: SkillName or None = None
         self._rank: Rank or None = None
         self._target: Target or None = None
         self._on_target: list[list[Effect]] or None = None
         self._on_self: list[list[Effect]] or None = None
-
-    def set_level(self, values: list[Any]):
-        self._level = self._factory.prepare_level(value)
-        return self
 
     def set_skill_name(self, value: Any):
         self._skill_name = self._factory.prepare_skill_name(value)
@@ -34,15 +28,12 @@ class BaseSkill(ABC):
         return self
 
     def set_on_target(self, values: list[Any]):
-        self._on_target = self._factory.prepare_on_target(value)
+        self._on_target = self._factory.prepare_on_target(values)
         return self
 
     def set_on_self(self, values: list[Any]):
-        self._on_self = self._factory.prepare_on_self(value)
+        self._on_self = self._factory.prepare_on_self(values)
         return self
-
-    def get_level(self):
-        return self._level
 
     def get_skill_name(self):
         return self._skill_name

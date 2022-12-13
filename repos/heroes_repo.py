@@ -2,7 +2,7 @@ import logging
 from typing import Generator, Any
 
 from constants import pretty
-from model.character_manager import CharacterManager
+from factories.hero_factory import HeroFactory
 from model.hero_model import HeroModel
 from repos.daos.hero_dao import HeroDAO
 from repos.daos.heroes_dao import HeroesDAO
@@ -28,15 +28,16 @@ class HeroesRepo:
     @classmethod
     def add_level_attributes_to_hero(cls, hero: HeroModel):
         for attrs in HeroDAO.get_level_attributes(hero):
-            model = CharacterManager.get_hero_level_attributes_model(**attrs)
+            model = HeroFactory.get_level_attributes_model(**attrs)
             logger.info(pretty(model))
+            
             hero.add_levels_attrs(model)
         return cls
 
     @classmethod
     def add_resistances_to_hero(cls, hero: HeroModel):
         for attrs in HeroDAO.get_resistances(hero):
-            resistance = CharacterManager.get_resistances_attributes(**attrs)
+            resistance = HeroFactory.get_resistances_attributes(**attrs)
             logger.info(pretty(resistance))
             hero.add_resistance(resistance)
         return cls
@@ -44,7 +45,7 @@ class HeroesRepo:
     @classmethod
     def add_other_info_to_hero(cls, hero: HeroModel):
         for attrs in HeroDAO.get_other_info(hero):
-            other_info = CharacterManager.get_other_info(**attrs)
+            other_info = HeroFactory.get_other_info(**attrs)
             logger.info(pretty(other_info))
             hero.add_other_info(other_info)
         return cls
@@ -52,7 +53,7 @@ class HeroesRepo:
     @classmethod
     def add_skills_to_hero(cls, hero: HeroModel):
         for skill_attrs in HeroDAO.get_skills(hero):
-            skill = CharacterManager.get_skill(skill_attrs)
+            skill = HeroFactory.get_skill(skill_attrs)
             logger.info(f'{pretty(skill)}')
             hero.add_skill(skill)
         return cls
