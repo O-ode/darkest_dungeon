@@ -11,50 +11,45 @@ from selenium.webdriver.support import expected_conditions as EC
 from constants import pretty, skip_regex
 from driver_singleton import DriverSingleton
 from factories.web_element_value_factory import WebElementValueFactory
-from model.hero_model import HeroModel
+from model.enemy_model import EnemyModel
 from model.skill.kwargs import skill_kwargs
 
 logger = logging.getLogger()
 
 
-class HeroDAO:
+class EnemyDAO:
     @classmethod
-    def get_level_attributes(cls, hero: HeroModel) -> Generator[dict[str, str], Any, None]:
+    def get_level_attributes(cls, enemy: EnemyModel) -> Generator[dict[str, str], Any, None]:
+
         raw_attributes = \
             [[WebElementValueFactory.str_underscored_lower_from_inner_text(element) for element in elements_row]
-             for elements_row in HeroSeleniumDAO.get_level_attributes_elements(hero)]
+             for elements_row in EnemySeleniumDAO.get_level_attributes_elements(enemy)]
 
-        raw_attributes = {row[0]: row[1:] for row in raw_attributes}
+        raw_attributes = {row[0]: row[1] for row in raw_attributes}
+        raw_attributes['hp_stygian'] = raw_attributes.pop('hp_(stygian/bloodmoon)')
         for i in range(5):
             level_attrs = {name: values[i] for name, values in raw_attributes.items()}
             logger.info(pretty(level_attrs))
             yield level_attrs
 
     @classmethod
-    def get_resistances(cls, hero) -> Generator[dict[str, str], Any, None]:
-        for name_element, value_element in HeroSeleniumDAO.get_resistances(hero):
+    def get_resistances(cls, enemy) -> Generator[dict[str, str], Any, None]:
+        for name_element, value_element in EnemySeleniumDAO.get_resistances(enemy):
             resistance_name = WebElementValueFactory.str_underscored_lower_from_inner_text(name_element)
             resistance_value = WebElementValueFactory.str_text_from_inner_text(value_element)
             yield {'name': resistance_name, 'value': resistance_value}
 
     @classmethod
-    def get_other_info(cls, hero) -> Generator[dict[str, str], Any, None]:
-        for name_element, value_element in HeroSeleniumDAO.get_other_info(hero):
+    def get_other_info(cls, enemy) -> Generator[dict[str, str], Any, None]:
+        for name_element, value_element in EnemySeleniumDAO.get_other_info(enemy):
             other_attribute_name = WebElementValueFactory.str_underscored_lower_from_inner_text(name_element)
             other_attribute_value = WebElementValueFactory.str_text_from_inner_text(value_element)
             yield {'name': other_attribute_name, 'value': other_attribute_value}
 
     @classmethod
-    def get_camping_skills(cls, hero):
-        attr_names = ['skill_name', 'time_cost', 'target', 'description']
-        for value_elements in HeroSeleniumDAO.get_camping_skills(hero):
-            yield {attr_name: WebElementValueFactory.str_text_from_inner_text(value_element)
-                   for attr_name, value_element in zip(attr_names, value_elements)}
+    def get_skills(cls, enemy) -> Generator[dict[str, str], Any, None]:
 
-    @classmethod
-    def get_skills(cls, hero) -> Generator[dict[str, str], Any, None]:
-
-        for i, skill_table_attrs in enumerate(HeroSeleniumDAO.get_skills(hero)):
+        for i, skill_table_attrs in enumerate(EnemySeleniumDAO.get_skills(enemy)):
             factory_values = {}
 
             skill_name = WebElementValueFactory.str_underscored_lower_from_inner_text(skill_table_attrs["skill_name"])
@@ -97,26 +92,26 @@ class HeroDAO:
             yield factory_values
 
 
-class HeroSeleniumDAO:
+class EnemySeleniumDAO:
 
     @classmethod
-    def get_level_attributes_elements(cls, hero: HeroModel) -> list[list[WebElement]]:
-        parsed = re.sub(r' ', '_', hero.name)
+    def get_level_attributes_elements(cls, enemy: EnemyModel) -> list[list[WebElement]]:
+        parsed = re.sub(r' ', '_', enemy.name)
         url = f'https://darkestdungeon.fandom.com/wiki/{parsed}'
 
         if DriverSingleton.get_driver().current_url != url:
             DriverSingleton.get_driver().get(url)
 
         character_table = DriverSingleton.get_wait().until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, f'.charactertable > tbody:nth-child(1)'))
+            EC.presence_of_element_located((By.CSS_SELECTOR, f'.charactertable > tbody'))
         )
 
-        for row in iter(character_table.find_elements(By.CSS_SELECTOR, f'tr')[3:11]):
+        for row in iter(character_table.find_elements(By.CSS_SELECTOR, f'tr')[6:12]):
             yield row.find_elements(By.CSS_SELECTOR, f'td')
 
     @classmethod
-    def get_other_info(cls, hero):
-        parsed = re.sub(r' ', '_', hero.name)
+    def get_other_info(cls, enemy):
+        parsed = re.sub(r' ', '_', enemy.name)
         url = f'https://darkestdungeon.fandom.com/wiki/{parsed}'
 
         if DriverSingleton.get_driver().current_url != url:
@@ -131,8 +126,8 @@ class HeroSeleniumDAO:
             yield other_attribute_name, other_attribute_value
 
     @classmethod
-    def get_resistances(cls, hero):
-        parsed = re.sub(r' ', '_', hero.name)
+    def get_resistances(cls, enemy):
+        parsed = re.sub(r' ', '_', enemy.name)
         url = f'https://darkestdungeon.fandom.com/wiki/{parsed}'
 
         if DriverSingleton.get_driver().current_url != url:
@@ -149,8 +144,8 @@ class HeroSeleniumDAO:
                 yield name_element, value_element
 
     @classmethod
-    def get_camping_skills(cls, hero):
-        parsed = re.sub(r' ', '_', hero.name)
+    def get_camping_skills(cls, enemy):
+        parsed = re.sub(r' ', '_', enemy.name)
         url = f'https://darkestdungeon.fandom.com/wiki/{parsed}'
 
         if DriverSingleton.get_driver().current_url != url:
@@ -187,8 +182,8 @@ class HeroSeleniumDAO:
                 yield results
 
     @classmethod
-    def get_skills(cls, hero):
-        parsed = re.sub(r' ', '_', hero.name)
+    def get_skills(cls, enemy):
+        parsed = re.sub(r' ', '_', enemy.name)
         url = f'https://darkestdungeon.fandom.com/wiki/{parsed}'
 
         if DriverSingleton.get_driver().current_url != url:
@@ -213,6 +208,8 @@ class HeroSeleniumDAO:
                     continue
                 logger.info(f'skill_name: {skill_name}')
                 table_attrs['skill_name'] = skill_name_element
+
+                # skill_attributes_elements = [skill_name_element]
 
             except:
                 try:
@@ -254,5 +251,4 @@ class HeroSeleniumDAO:
             except:
                 logger.warning(f'Couldn\'t find limit for skill')
                 pass
-
             yield table_attrs

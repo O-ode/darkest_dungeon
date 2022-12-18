@@ -1,15 +1,15 @@
 from abc import ABC
-from typing import Any, Type
+from typing import Any
 
 from base_classes.character_attributes import HP, Dodge, Prot, Spd, Level
 from constants import pretty
-from factories.hero_attributes_factories import HerolevelAttributesFactory
+from model.skill.type_vars import CharacterModelFactories
 
 
 class BaseLevelAttributesModel(ABC):
 
     def __init__(self, factory):
-        self._factory: Type[HerolevelAttributesFactory] = factory
+        self._factory: CharacterModelFactories = factory
         self._level: Level or None = None
         self._hp: HP or None = None
         self._dodge: Dodge or None = None

@@ -19,8 +19,8 @@ service = Service(
 
 class DriverSingleton:
     __driver: webdriver.Chrome = webdriver.Chrome(service=service, options=options)
-    __wait: WebDriverWait = WebDriverWait(__driver, 10)
-    __actions: ActionChains = ActionChains(__driver)
+    # __wait: WebDriverWait = WebDriverWait(__driver, 10)
+    # __actions: ActionChains = ActionChains(__driver)
 
     @classmethod
     def close(cls, wait=False):
@@ -37,8 +37,8 @@ class DriverSingleton:
 
     @classmethod
     def get_actions(cls):
-        return cls.__actions
+        return ActionChains(cls.__driver)
 
     @classmethod
     def get_wait(cls):
-        return cls.__wait
+        return WebDriverWait(cls.__driver, 10)

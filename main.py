@@ -64,7 +64,7 @@ def setup_logger():
 if __name__ == '__main__':
     logger = setup_logger()
     # driver, wait, actions = setup_driver()
-
+    screenshot_number = 1
     try:
         for i, hero in enumerate(HeroesRepo.get_heroes(), start=1):
             logger.info(f'Hero nª {i}: {hero.name}')
@@ -72,16 +72,13 @@ if __name__ == '__main__':
                 HeroesRepo.add_level_attributes_to_hero(hero) \
                     .add_resistances_to_hero(hero) \
                     .add_other_info_to_hero(hero) \
-                    .add_skills_to_hero(hero)
+                    .add_skills_to_hero(hero) \
+                    .add_camping_skills_to_hero(hero)
                 logger.info(hero)
             except WebDriverException as wde:
                 logger.error(traceback.format_exc())
-                logger.error(wde)
-                if wde.screen:
-                    logger.error(wde.screen)
-                    with open(f'error_{i:03}', 'w') as screenshot:
-                        pass
-                        # screenshot.write(wde.screen)
+                DriverSingleton.get_driver().get_screenshot_as_file(f'error_{screenshot_number:04}.png')
+                screenshot_number += 1
 
         # logger.info(f'Character list:')
         # for c in characters:

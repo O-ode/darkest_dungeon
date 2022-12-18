@@ -1,5 +1,4 @@
 from abc import abstractmethod
-from typing import Type
 
 from base_classes.type_vars import DerivedFromBasicAttributes
 from factories.hero_attributes_factories import ResistancesFactory

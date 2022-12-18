@@ -19,7 +19,7 @@ class HeroesRepo:
             for name in HeroesDAO.get_heroes_names():
                 hero = HeroModel(name)
                 cls.heroes.append(hero)
-            yield from cls.heroes
+                yield hero
         else:
             for hero in cls.heroes:
                 logger.info(f'Hero: {hero.name}')
@@ -30,7 +30,7 @@ class HeroesRepo:
         for attrs in HeroDAO.get_level_attributes(hero):
             model = HeroFactory.get_level_attributes_model(**attrs)
             logger.info(pretty(model))
-            
+
             hero.add_levels_attrs(model)
         return cls
 
@@ -56,4 +56,12 @@ class HeroesRepo:
             skill = HeroFactory.get_skill(skill_attrs)
             logger.info(f'{pretty(skill)}')
             hero.add_skill(skill)
+        return cls
+
+    @classmethod
+    def add_camping_skills_to_hero(cls, hero: HeroModel):
+        for skill_attrs in HeroDAO.get_camping_skills(hero):
+            skill = HeroFactory.get_camping_skill(**skill_attrs)
+            logger.info(f'{pretty(skill)}')
+            hero.add_camping_skill(skill)
         return cls

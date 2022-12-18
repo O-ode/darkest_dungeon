@@ -24,3 +24,4 @@
 #         if len(skills) > 0:
 #             # yield HeroModel(character.class_name, skills)
 #             pass
+

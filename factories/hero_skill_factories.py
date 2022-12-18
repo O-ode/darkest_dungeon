@@ -28,3 +28,22 @@ class HeroSkillFactory(BaseSkillFactory):
     @classmethod
     def prepare_on_other_heroes(cls, values: list[str]):
         return [ValueModifyingFactory.text_to_effect_list(value) for value in values]
+
+
+class CampingSkillFactory:
+
+    @classmethod
+    def prepare_skill_name(cls, value: str):
+        return ValueModifyingFactory.do_nothing(value)
+
+    @classmethod
+    def prepare_time_cost(cls, value: str):
+        return ValueModifyingFactory.text_to_int(value)
+
+    @classmethod
+    def prepare_target(cls, value: str):
+        return ValueModifyingFactory.do_nothing(value)
+
+    @classmethod
+    def prepare_description(cls, value: str):
+        return ValueModifyingFactory.text_to_effect_list(value)

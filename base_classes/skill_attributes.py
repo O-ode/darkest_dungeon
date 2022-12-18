@@ -47,3 +47,7 @@ class CritMod(BasicAttribute):
 
 class Heal(BasicAttribute):
     pass
+
+
+class TimeCost(BasicAttribute):
+    pass

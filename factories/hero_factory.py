@@ -1,7 +1,8 @@
 from factories.character_factory import CharacterFactory
-from factories.hero_attributes_factories import HerolevelAttributesFactory, OtherHeroAttributesFactory
-from factories.hero_skill_factories import HeroSkillFactory
+from factories.hero_attributes_factories import HeroLevelAttributesFactory, OtherHeroAttributesFactory
+from factories.hero_skill_factories import HeroSkillFactory, CampingSkillFactory
 from model.character_attributes.hero_attributes import HeroLevelAttributesModel
+from model.skill.camping_skill import CampingSkill
 from model.skill.hero_skills import HeroSupportSkill, HeroHealSkill, HeroOffensiveSkill
 from model.skill.type_vars import DerivedFromHeroBaseSkill
 
@@ -63,7 +64,7 @@ class HeroFactory(CharacterFactory):
     def get_level_attributes_model(cls, resolve: str, max_hp: str, dodge: str, prot: str,
                                    spd: str, acc_mod: str, crit: str, dmg: str) \
             -> HeroLevelAttributesModel:
-        model = HeroLevelAttributesModel(HerolevelAttributesFactory)
+        model = HeroLevelAttributesModel(HeroLevelAttributesFactory)
         cls._set_shared_attrs_to_character_model(model, resolve, max_hp, dodge, prot, spd)
 
         return model \
@@ -79,4 +80,13 @@ class HeroFactory(CharacterFactory):
             "religious": OtherHeroAttributesFactory.prepare_religious,
             "provisions": OtherHeroAttributesFactory.prepare_provisions
         }
+
         return other_info_dict[name](value)
+
+    @classmethod
+    def get_camping_skill(cls, skill_name: str, time_cost: str, target: str, description: str):
+        return CampingSkill(CampingSkillFactory) \
+            .set_skill_name(skill_name) \
+            .set_time_cost(time_cost) \
+            .set_target(target) \
+            .set_description(description)

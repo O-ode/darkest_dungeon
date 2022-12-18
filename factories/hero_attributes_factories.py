@@ -9,7 +9,7 @@ from factories.base_attributes_factories import BaseLevelAttributesFactory
 from factories.value_modifying_factory import ValueModifyingFactory
 
 
-class HerolevelAttributesFactory(BaseLevelAttributesFactory):
+class HeroLevelAttributesFactory(BaseLevelAttributesFactory):
 
     @classmethod
     def prepare_level(cls, value: str) -> Level:
