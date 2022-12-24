@@ -5,8 +5,10 @@ from constants import pretty
 from factories.hero_factory import HeroFactory
 from model.hero_model import HeroModel
 from repos.daos.hero_dao import HeroDAO
-from repos.daos.heroes_dao import HeroesDAO
+from repos.daos.text_reader_daos.constants import HERO_LIST
 
+import warnings
+warnings.warn("File to be updated", DeprecationWarning)
 logger = logging.getLogger()
 
 
@@ -16,46 +18,43 @@ class HeroesRepo:
     @classmethod
     def get_heroes(cls) -> Generator[HeroModel, Any, None]:
         if len(cls.heroes) == 0:
-            for name in HeroesDAO.get_heroes_names():
+            for name in iter(HERO_LIST):
                 hero = HeroModel(name)
                 cls.heroes.append(hero)
-                yield hero
-        else:
-            for hero in cls.heroes:
-                logger.info(f'Hero: {hero.name}')
                 yield hero
 
     @classmethod
     def add_level_attributes_to_hero(cls, hero: HeroModel):
-        for attrs in HeroDAO.get_level_attributes(hero):
-            model = HeroFactory.get_level_attributes_model(**attrs)
-            logger.info(pretty(model))
+        pass
 
-            hero.add_levels_attrs(model)
-        return cls
+    # for attrs in HeroDAO.get_level_attributes(hero):
+    #     model = HeroFactory.get_level_attributes_model(**attrs)
+    #     logger.info(pretty(model))
+    #
+    #     hero.add_levels_attrs(model)
+    # return cls
+
+    @classmethod
+    def get_resistances_from_hero(cls, hero: HeroModel):
+        if len(hero.get_resistances()) == 0:
+            cls.add_resistances_to_hero(hero)
+        return hero.get_resistances()
 
     @classmethod
     def add_resistances_to_hero(cls, hero: HeroModel):
-        for attrs in HeroDAO.get_resistances(hero):
-            resistance = HeroFactory.get_resistances_attributes(**attrs)
+        for attrs in HeroDAO.get_resistances_for_hero(hero):
+            logger.info(attrs)
+            resistance = HeroFactory.get_resistance_factory_method(**attrs)
             logger.info(pretty(resistance))
             hero.add_resistance(resistance)
         return cls
 
     @classmethod
-    def add_other_info_to_hero(cls, hero: HeroModel):
-        for attrs in HeroDAO.get_other_info(hero):
-            other_info = HeroFactory.get_other_info(**attrs)
-            logger.info(pretty(other_info))
-            hero.add_other_info(other_info)
-        return cls
-
-    @classmethod
-    def add_skills_to_hero(cls, hero: HeroModel):
-        for skill_attrs in HeroDAO.get_skills(hero):
+    def add_combat_skills_to_hero(cls, hero: HeroModel):
+        for skill_attrs in HeroDAO.get_combat_skills(hero):
             skill = HeroFactory.get_skill(skill_attrs)
             logger.info(f'{pretty(skill)}')
-            hero.add_skill(skill)
+            hero.add_combat_skill(skill)
         return cls
 
     @classmethod

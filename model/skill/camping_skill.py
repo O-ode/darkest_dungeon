@@ -1,6 +1,7 @@
 from typing import Type, Any
 
-from base_classes.skill_attributes import SkillName, Target, Effect, TimeCost
+from base_classes.common import Name
+from base_classes.skill_attributes import Target, Effect, TimeCost
 from constants import pretty
 from factories.hero_skill_factories import CampingSkillFactory
 
@@ -8,7 +9,7 @@ from factories.hero_skill_factories import CampingSkillFactory
 class CampingSkill:
     def __init__(self, factory: Type[CampingSkillFactory]):
         self._factory = factory
-        self._skill_name: SkillName or None = None
+        self._skill_name: Name or None = None
         self._time_cost: TimeCost or None = None
         self._target: Target or None = None
         self._description: list[Effect] or None = None

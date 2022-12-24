@@ -2,19 +2,12 @@ import re
 from enum import Enum, IntFlag, StrEnum, auto
 from pprint import PrettyPrinter
 
-pp = PrettyPrinter(indent=4, compact=False, sort_dicts=False)
+pp = PrettyPrinter(indent=4, sort_dicts=False)
 stats = ["MAX HP", "DODGE", "PROT", "SPD", "ACC MOD", "CRIT", "DMG"]
 level_levels = [1, 2, 3, 4, 5]
 
-colored_dots_regex = re.compile(r'(Yellow|Red)\sdot.+png', re.I)
 percentage_regex = re.compile(r'([+\-]?\s*\d+)(\.\d+)?%?', re.I)
-flags_for_effect_regex = re.compile(r'Other\s+Heroes:', re.I)
 range_regex = re.compile(r'(\d+)\s*-\s*(\d+)', re.I)
-range_values_regex = re.compile(r'(Melee|Ranged)', re.I)
-skill_attributes_regex = re.compile(r'(Range|Rank|Target|Damage|Accuracy|Crit\s+mod|Effect|Self|Heal)', re.I)
-skip_regex = re.compile(r'(Expand|Further\s*levels)', re.I)
-level_level_attributes_regex = re.compile(r"(max_hp|dodge|prot|spd|acc_mod|crit|dmg)", re.I)
-resistances_regex = re.compile(r"(bleed|blight|disease|debuff|death_blow|trap|stun|move)")
 
 
 class Effects(Enum):
@@ -33,6 +26,8 @@ class PositionFlag(IntFlag):
     THIRD = auto()
     FOURTH = auto()
     SELF = auto()
+    ALSO_SELF = auto()
+    SIMULTANEOUS = auto()
 
     def __repr__(self):
         return f'PositionFlag.{self.name}: {self.value}'
@@ -49,10 +44,17 @@ class ResistancesEnum(StrEnum):
     TRAP = r'trap'
 
 
-class RangeEnum(StrEnum):
-    MELEE = "Melee"
-    RANGED = "Ranged"
-    SUPPORT = "Support"
+# noinspection PyArgumentList
+class SkillBooleans(IntFlag):
+    CRIT_VALID = auto()
+    STALL_INVALIDATING = auto()
+    GENERATION_GUARANTEED = auto()
+
+
+class SkillTypeEnum(StrEnum):
+    MELEE = "melee"
+    RANGED = "ranged"
+    MOVE = "move"
 
 
 def pretty(obj):

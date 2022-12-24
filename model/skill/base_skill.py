@@ -1,16 +1,18 @@
 from abc import ABC
 from typing import Any, Type
 
-from base_classes.skill_attributes import Effect, Rank, SkillName, Target
+from base_classes.common import Name
+from base_classes.skill_attributes import Effect, Launch, Target
 from constants import pretty
 from factories.type_vars import DerivedFromBaseSkillFactory
 
 
 class BaseSkill(ABC):
+
     def __init__(self, factory):
         self._factory: Type[DerivedFromBaseSkillFactory] = factory
-        self._skill_name: SkillName or None = None
-        self._rank: Rank or None = None
+        self._skill_name: Name or None = None
+        self._launch: Launch or None = None
         self._target: Target or None = None
         self._on_target: list[list[Effect]] or None = None
         self._on_self: list[list[Effect]] or None = None
@@ -19,8 +21,8 @@ class BaseSkill(ABC):
         self._skill_name = self._factory.prepare_skill_name(value)
         return self
 
-    def set_rank(self, value: Any):
-        self._rank = self._factory.prepare_rank(value)
+    def set_launch(self, value: Any):
+        self._launch = self._factory.prepare_launch(value)
         return self
 
     def set_target(self, value: Any):
@@ -38,8 +40,8 @@ class BaseSkill(ABC):
     def get_skill_name(self):
         return self._skill_name
 
-    def get_rank(self):
-        return self._rank
+    def get_launch(self):
+        return self._launch
 
     def get_target(self):
         return self._target

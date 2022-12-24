@@ -1,11 +1,7 @@
 import datetime
 import logging
 import os.path
-import traceback
 
-from selenium.common import WebDriverException
-
-from driver_singleton import DriverSingleton
 from repos.heroes_repo import HeroesRepo
 
 
@@ -63,34 +59,14 @@ def setup_logger():
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     logger = setup_logger()
-    # driver, wait, actions = setup_driver()
-    screenshot_number = 1
-    try:
-        for i, hero in enumerate(HeroesRepo.get_heroes(), start=1):
-            logger.info(f'Hero nª {i}: {hero.name}')
-            try:
-                HeroesRepo.add_level_attributes_to_hero(hero) \
-                    .add_resistances_to_hero(hero) \
-                    .add_other_info_to_hero(hero) \
-                    .add_skills_to_hero(hero) \
-                    .add_camping_skills_to_hero(hero)
-                logger.info(hero)
-            except WebDriverException as wde:
-                logger.error(traceback.format_exc())
-                DriverSingleton.get_driver().get_screenshot_as_file(f'error_{screenshot_number:04}.png')
-                screenshot_number += 1
+    for i, hero in enumerate(HeroesRepo.get_heroes(), start=1):
+        logger.info(f'Hero nª {i}: {hero.get_name()}')
+        HeroesRepo.get_resistances_from_hero(hero)
+        logger.info(hero)
 
         # logger.info(f'Character list:')
         # for c in characters:
         #     n_skills = len(c.skills)
         #     logger.info(f'{c.name} with {n_skills} skills:\n{pretty(c)}')
         #     assert n_skills >= 7
-
-    except:
-        logger.error(traceback.format_exc())
-        DriverSingleton.get_driver().get_screenshot_as_file('lolmao.png')
-        DriverSingleton.close(wait=True)
-        exit(1)
-
-    DriverSingleton.close()
     exit(0)

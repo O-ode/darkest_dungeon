@@ -1,15 +1,21 @@
-from base_classes.skill_attributes import Limit, Rank, SkillName, Target
+import warnings
+
+from base_classes.common import Name
+from base_classes.skill_attributes import Limit, Launch, Target
 from factories.value_modifying_factory import ValueModifyingFactory
+
+warnings.warn("File to be updated", DeprecationWarning)
 
 
 class BaseSkillFactory:
-    @classmethod
-    def prepare_skill_name(cls, value: str):
-        return SkillName(value)
 
     @classmethod
-    def prepare_rank(cls, values: list[int]):
-        return Rank(ValueModifyingFactory.int_array_to_position_flag(values))
+    def prepare_skill_name(cls, value: str):
+        return Name(value)
+
+    @classmethod
+    def prepare_launch(cls, values: list[int]):
+        return Launch(ValueModifyingFactory.int_array_to_position_flag(values))
 
     @classmethod
     def prepare_target(cls, values: list[int]):

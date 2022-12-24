@@ -3,7 +3,7 @@ import re
 
 from base_classes.int_over_rounds import IntOverRounds
 from base_classes.skill_attributes import Effect
-from constants import percentage_regex, range_regex, RangeEnum, PositionFlag
+from constants import percentage_regex, range_regex, SkillTypeEnum, PositionFlag, SkillBooleans
 
 logger = logging.getLogger()
 
@@ -28,7 +28,7 @@ class ValueModifyingFactory:
 
     @classmethod
     def text_to_int_range(cls, s: str):
-        split = s.split("-")
+        split = re.split(r'[\- ]', s)
         lower = ValueModifyingFactory.text_to_int(split[0])
         upper = ValueModifyingFactory.text_to_int(split[1])
         return lower, upper
@@ -55,13 +55,34 @@ class ValueModifyingFactory:
             return cls.text_to_int(s)
 
     @classmethod
-    def str_to_range_enum(cls, s: str) -> RangeEnum:
-        for item in list(RangeEnum):
+    def merge_skill_booleans(cls, **kwargs) -> SkillBooleans:
+        mapping = {'is_crit_valid': SkillBooleans.CRIT_VALID,
+                   'is_stall_invalidating': SkillBooleans.STALL_INVALIDATING,
+                   'generation_guaranteed': SkillBooleans.GENERATION_GUARANTEED}
+
+        flag = 0
+        for k, v in iter(kwargs.items()):
+            if v:
+                flag |= mapping[k]
+
+        return SkillBooleans(flag)
+
+    @classmethod
+    def str_to_skill_type(cls, s: str) -> SkillTypeEnum:
+        for item in list(SkillTypeEnum):
             if s == item.value:
                 return item
 
     @classmethod
     def int_array_to_position_flag(cls, values: list[int]) -> PositionFlag:
+        # do not delete
+        mapping = {'1': 0,
+                   '2': 1,
+                   '3': 2,
+                   '4': 3,
+                   '': 4,
+                   '@': 5,
+                   '~': 6}
         positions = list(PositionFlag)
         position_flag = PositionFlag(positions[values[0]])
         logger.info(position_flag)

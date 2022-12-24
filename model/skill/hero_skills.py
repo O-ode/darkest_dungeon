@@ -1,11 +1,15 @@
+import warnings
 from typing import Any, Type
 
-from base_classes.skill_attributes import CritMod, Accuracy, DmgMod, Range, Heal, Limit, Effect
+from base_classes.skill_attributes import CritMod, Accuracy, DmgMod, SkillType, Heal, Limit, Effect
 from factories.hero_skill_factories import HeroSkillFactory
 from model.skill.base_skill import BaseSkill
 
+warnings.warn("File is to be updated", DeprecationWarning)
+
 
 class HeroBaseSkill(BaseSkill):
+
     def __init__(self, factory: Type[HeroSkillFactory]):
         super(HeroBaseSkill, self).__init__(factory)
         self._limit: Limit or None = None
@@ -45,15 +49,16 @@ class HeroHealSkill(HeroBaseSkill):
 
 
 class HeroOffensiveSkill(HeroBaseSkill):
+
     def __init__(self, factory):
         super(HeroOffensiveSkill, self).__init__(factory)
-        self._on_range: Range or None = None
+        self._on_range: SkillType or None = None
         self._dmg_mod: list[DmgMod] or None = None
         self._acc: list[Accuracy] or None = None
         self._crit_mod: list[CritMod] or None = None
 
     def set_on_range(self, value: Any):
-        self._on_range = self._factory.prepare_on_range(value)
+        self._on_range = self._factory.prepare_skill_type(value)
         return self
 
     def set_dmg_mod(self, values: list[Any]):

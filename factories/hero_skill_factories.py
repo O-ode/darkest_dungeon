@@ -1,13 +1,25 @@
-from base_classes.skill_attributes import Heal, CritMod, Accuracy, DmgMod, Range
+import warnings
+
+from base_classes.skill_attributes import Heal, CritMod, Accuracy, DmgMod, SkillType, Level, Move
+from constants import SkillBooleans
 from factories.base_skill_factories import BaseSkillFactory
 from factories.value_modifying_factory import ValueModifyingFactory
 
+warnings.warn("File to be updated", DeprecationWarning)
+
 
 class HeroSkillFactory(BaseSkillFactory):
+    @classmethod
+    def prepare_move(cls, values: list[str]):
+        return Move(int(values[0]), int(values[1]))
 
     @classmethod
-    def prepare_on_range(cls, value: str):
-        return Range(ValueModifyingFactory.str_to_range_enum(value))
+    def prepare_skill_booleans(cls, **values):
+        return SkillBooleans(ValueModifyingFactory.merge_skill_booleans(**values))
+
+    @classmethod
+    def prepare_skill_type(cls, value: str):
+        return SkillType(ValueModifyingFactory.str_to_skill_type(value))
 
     @classmethod
     def prepare_dmg_mod(cls, values: list[str]):
@@ -24,6 +36,10 @@ class HeroSkillFactory(BaseSkillFactory):
     @classmethod
     def prepare_heal(cls, values: list[str]):
         return [Heal(ValueModifyingFactory.text_to_hp_modification_value(v)) for v in values]
+
+    @classmethod
+    def prepare_level(cls, value: str):
+        return Level(ValueModifyingFactory.text_to_int(value))
 
     @classmethod
     def prepare_on_other_heroes(cls, values: list[str]):

@@ -1,4 +1,12 @@
+import warnings
+
 from base_classes.basic_attribute import BasicAttribute
+
+warnings.warn("File to be updated", DeprecationWarning)
+
+
+class Tag(BasicAttribute):
+    pass
 
 
 class HP(BasicAttribute):
@@ -22,8 +30,4 @@ class Crit(BasicAttribute):
 
 
 class AccMod(BasicAttribute):
-    pass
-
-
-class Level(BasicAttribute):
     pass
