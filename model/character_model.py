@@ -1,11 +1,8 @@
-import warnings
 from abc import ABC
 
 from base_classes.type_vars import ResistanceType
 from constants import pretty
-from model.skill.hero_combat_skills.type_vars import DerivedFromBaseSkill
-
-warnings.warn("File to be updated", DeprecationWarning)
+from model.skill.hero_combat_skills.type_vars import HeroCombatSkillTypes
 
 
 class CharacterModel(ABC):
@@ -13,13 +10,13 @@ class CharacterModel(ABC):
     def __init__(self, name=None):
         self._name: str = name
         self._resistances: list[ResistanceType] = []
-        self._skills: list[DerivedFromBaseSkill] = []
+        self._skills: list[HeroCombatSkillTypes] = []
 
     def add_resistance(self, resistance: ResistanceType):
         self._resistances.append(resistance)
         return self
 
-    def add_skill(self, skill: DerivedFromBaseSkill):
+    def add_skill(self, skill: HeroCombatSkillTypes):
         self._skills.append(skill)
         return self
 

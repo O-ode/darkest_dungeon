@@ -1,11 +1,11 @@
-import logging
+import multiprocessing as mp
 import warnings
 from typing import Any, Generator
 
 from model.enemy_model import EnemyModel
 
 warnings.warn("File to be updated", DeprecationWarning)
-logger = logging.getLogger()
+logger = mp.get_logger()
 
 
 class EnemyDAO:

@@ -1,89 +1,75 @@
-import logging
+import multiprocessing as mp
 from typing import Any
 
+from constants import pretty
+from repos.daos.text_reader_daos.file_class import FileClass
 from repos.daos.text_reader_daos.text_reader_dao import TextReaderDao
 
-logger = logging.getLogger()
-
-
-class FileClass:
-    def __init__(self, relative_path: str, name: str, file_values: dict = None):
-        self.relative_path = relative_path
-        self.name = name
-        self.file_values: dict or None = file_values
-
-    def get_absolute_path(self):
-        return r'\\'.join([self.relative_path, self.name])
-
-    def __eq__(self, other):
-        if other is not None and isinstance(other, self.__class__):
-            if self.name == other.name:
-                return self.relative_path == other.relative_path
-            else:
-                return False
-        else:
-            return False
-
-    def __lt__(self, other):
-        if other is not None and isinstance(other, self.__class__):
-            if self.relative_path < other.relative_path:
-                return True
-            elif self.relative_path > other.relative_path:
-                return False
-            else:
-                if self.name < other.name:
-                    return True
-                else:
-                    return False
-
-    def __gt__(self, other):
-        if other is not None and isinstance(other, self.__class__):
-            if self.relative_path > other.relative_path:
-                return True
-            elif self.relative_path < other.relative_path:
-                return False
-            else:
-                if self.name > other.name:
-                    return True
-                else:
-                    return False
+logger = mp.get_logger()
 
 
 class FileRepo:
-    files: [FileClass] = []
+    _files: [FileClass] = []
 
     @classmethod
-    def get_dict_from_file(cls, relative_path: str, name: str):
-        target_file = FileClass(relative_path, name)
-        if len(cls.files) > 0:
-            result, index = cls.find_in_list_merge_recursively(cls.files, target_file)
-        else:
-            result, index = None, 0
+    def get_file(cls, relative_path: str, name: str):
+        search_file = FileClass(relative_path, name)
+        result, index = cls.find_in_list_merge_recursively(cls._files, search_file)
         if result is None:
-            target_file.file_values = TextReaderDao.file_to_dict(relative_path, name)
-            if len(cls.files) == index:
-                cls.files.append(target_file)
-            else:
-                cls.files.insert(index, result)
-        return target_file.file_values
+            cls._add_file(search_file, index)
+            result = search_file
+        return result
 
     @classmethod
-    def find_in_list_merge_recursively(cls, arr: list, target: Any, steps=0, target_index=0) -> tuple[Any or None, int]:
-        steps += 1
-        index = len(arr) // 2
-        current = arr[index]
-        logger.debug(f'step: {steps}, index: {index}, target_index: {target_index}, current: {current}, '
-                     f'target:{target}, arr: {arr[0]}..{arr[-1]}')
-        if target == current:
-            target_index += index
-            logger.debug(f"Found target! {current}, steps given: {steps}")
-            return current, target_index
-        elif target > current:
-            if arr[0] == arr[-1]:
-                return None, target_index + 1
-            target_index += index
-            return cls.find_in_list_merge_recursively(arr[index:], target, steps, target_index)
+    def _add_file(cls, search_file: FileClass, index: int):
+        for row_values in TextReaderDao.extract_values_from_file(search_file):
+            logger.debug(f'Adding row values: {pretty(row_values)}')
+            search_file.add_file_values(row_values)
+
+        if len(cls._files) == index:
+            cls._files.append(search_file)
         else:
-            if arr[0] == arr[-1]:
-                return None, target_index
-            return cls.find_in_list_merge_recursively(arr[:index], target, steps, target_index)
+            cls._files.insert(index, search_file)
+
+    @classmethod
+    def get_file_values_by_key(cls, key: str, relative_path: str, name: str):
+        file_values = cls.get_file(relative_path, name).get_file_values()
+
+        for row_dict in file_values:
+            row_name = list(row_dict.keys())[0]
+            if row_name == key:
+                yield list(row_dict.values())[0]
+
+    @classmethod
+    def find_in_list_merge_recursively(cls, a_list: list, a_target: Any, **kwargs) -> tuple[Any or None, int]:
+
+        def _find_in_list_merge_recursively(arr: list, target: Any, steps=0, target_index=0) -> tuple[Any or None, int]:
+            steps += 1
+            index = len(arr) // 2
+            current = arr[index]
+            logger.debug(f'step: {steps}, index: {index}, target_index: {target_index}, current: {current}, '
+                         f'target:{target}, arr: {arr[0]}..{arr[-1]}')
+
+            # stopping conditions
+            if target == current:
+                target_index += index
+                logger.debug(f"Found target! {current}, steps given: {steps}")
+            elif arr[0] == arr[-1]:
+                if target > current:
+                    target_index += 1
+                current = None
+
+            else:
+                if target > current:
+                    target_index += index
+                    split_arr = arr[index:]
+                else:
+                    split_arr = arr[:index]
+                return _find_in_list_merge_recursively(split_arr, target, steps, target_index)
+
+            return current, target_index
+
+        if len(a_list) != 0:
+            return _find_in_list_merge_recursively(a_list, a_target, **kwargs)
+        else:
+            return None, 0

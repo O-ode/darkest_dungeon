@@ -15,19 +15,16 @@ class Move:
         self._forwards = forwards
 
     def __repr__(self):
-        return f'{self._backwards} backwards, {self._forwards} forwards'
+        return f'{self.__class__.__name__}:: {self._backwards} backwards, {self._forwards} forwards'
 
 
-class CritValid(BasicAttribute):
-    pass
+class Heal:
+    def __init__(self, lower: int, upper: int):
+        self._lower = lower
+        self._upper = upper
 
-
-class Guaranteed(BasicAttribute):
-    pass
-
-
-class StallInvalidating(BasicAttribute):
-    pass
+    def __repr__(self):
+        return f'{self.__class__.__name__}:: {self._lower}-{self._upper} hp'
 
 
 class Target(BasicAttribute):
@@ -50,23 +47,11 @@ class Limit(BasicAttribute):
     pass
 
 
-class Note(BasicAttribute):
-    pass
-
-
-class Dmg(BasicAttribute):
-    pass
-
-
 class DmgMod(BasicAttribute):
     pass
 
 
 class CritMod(BasicAttribute):
-    pass
-
-
-class Heal(BasicAttribute):
     pass
 
 

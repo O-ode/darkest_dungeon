@@ -1,9 +1,9 @@
-import logging
+import multiprocessing as mp
 import sqlite3
 
 from constants import pretty
 
-logger = logging.getLogger()
+logger = mp.get_logger()
 
 
 class DBManager:

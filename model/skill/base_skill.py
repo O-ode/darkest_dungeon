@@ -1,24 +1,35 @@
+import warnings
 from abc import ABC
 from typing import Any, Type
 
 from base_classes.common import Name
-from base_classes.skill_attributes import Effect, Launch, Target
+from base_classes.skill_attributes import Effect, Launch, Target, Level
 from constants import pretty
 from factories.type_vars import DerivedFromBaseSkillFactory
 
+warnings.warn("Deprecated", DeprecationWarning)
+
 
 class BaseSkill(ABC):
+    warnings.warn("Replaced by HeroOffensiveCombatSkill", DeprecationWarning)
 
     def __init__(self, factory):
+        warnings.warn("Replaced by HeroOffensiveCombatSkill", DeprecationWarning)
         self._factory: Type[DerivedFromBaseSkillFactory] = factory
         self._skill_name: Name or None = None
+        self._level: Level or None = None
         self._launch: Launch or None = None
         self._target: Target or None = None
         self._on_target: list[list[Effect]] or None = None
         self._on_self: list[list[Effect]] or None = None
 
     def set_skill_name(self, value: Any):
+        warnings.warn("Replaced by HeroOffensiveCombatSkill", DeprecationWarning)
         self._skill_name = self._factory.prepare_skill_name(value)
+        return self
+
+    def set_resolve_level(self, value: Any):
+        self._level = self._factory.prepare_level(value)
         return self
 
     def set_launch(self, value: Any):

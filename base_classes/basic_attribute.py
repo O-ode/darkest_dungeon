@@ -7,12 +7,17 @@ class BasicAttribute(ABC):
         self.value = value
 
     def __repr__(self):
-        return f'{self.__class__.__name__}: {self.value}'
+        return f'{self.__class__.__name__}:: {type(self.value)}: {self.value}'
+
+    def __eq__(self, other: Any):
+        if other is None or type(self) != other.__class__ or self.value != other.value:
+            return False
+        else:
+            return True
+
+    def __hash__(self):
+        return hash(self.value)
 
 
 class ResistanceBase(BasicAttribute):
-    pass
-
-
-class OtherAttributeBase(BasicAttribute):
     pass

@@ -1,11 +1,11 @@
-import logging
+import multiprocessing as mp
 import re
 
 from base_classes.int_over_rounds import IntOverRounds
 from base_classes.skill_attributes import Effect
 from constants import percentage_regex, range_regex, SkillTypeEnum, PositionFlag, SkillBooleans
 
-logger = logging.getLogger()
+logger = mp.get_logger()
 
 
 class ValueModifyingFactory:
@@ -55,41 +55,74 @@ class ValueModifyingFactory:
             return cls.text_to_int(s)
 
     @classmethod
-    def merge_skill_booleans(cls, **kwargs) -> SkillBooleans:
-        mapping = {'is_crit_valid': SkillBooleans.CRIT_VALID,
-                   'is_stall_invalidating': SkillBooleans.STALL_INVALIDATING,
-                   'generation_guaranteed': SkillBooleans.GENERATION_GUARANTEED}
+    def merge_skill_booleans(cls, is_crit_valid=True, is_continue_turn=False, generation_guaranteed=False,
+                             ignore_guard=False, ignore_stealth=False, ignore_protection=False,
+                             refresh_after_each_wave=False, is_stall_invalidating=True) -> SkillBooleans:
+        mapping = {
+            'is_continue_turn': SkillBooleans.CONTINUE_TURN,
+            'is_crit_valid': SkillBooleans.CRIT_VALID,
+            'generation_guaranteed': SkillBooleans.GENERATION_GUARANTEED,
+            'ignore_guard': SkillBooleans.IGNORE_GUARD,
+            'ignore_stealth': SkillBooleans.IGNORE_STEALTH,
+            'ignore_protection': SkillBooleans.IGNORE_PROTECTION,
+            'refresh_after_each_wave': SkillBooleans.REFRESH_AFTER_EACH_WAVE,
+            'is_stall_invalidating': SkillBooleans.STALL_INVALIDATING
+        }
 
         flag = 0
-        for k, v in iter(kwargs.items()):
-            if v:
-                flag |= mapping[k]
+        if is_crit_valid:
+            flag |= mapping['is_crit_valid']
+            logger.debug(flag)
+        if is_continue_turn:
+            flag |= mapping['is_continue_turn']
+            logger.debug(flag)
+        if generation_guaranteed:
+            flag |= mapping['generation_guaranteed']
+            logger.debug(flag)
+        if ignore_guard:
+            flag |= mapping['ignore_guard']
+            logger.debug(flag)
+        if ignore_stealth:
+            flag |= mapping['ignore_stealth']
+            logger.debug(flag)
+        if ignore_protection:
+            flag |= mapping['ignore_protection']
+            logger.debug(flag)
+        if refresh_after_each_wave:
+            flag |= mapping['refresh_after_each_wave']
+            logger.debug(flag)
+        if is_stall_invalidating:
+            flag |= mapping['is_stall_invalidating']
+            logger.debug(flag)
 
         return SkillBooleans(flag)
 
     @classmethod
     def str_to_skill_type(cls, s: str) -> SkillTypeEnum:
         for item in list(SkillTypeEnum):
-            if s == item.value:
+            if re.search(item.value, s, re.I):
                 return item
 
     @classmethod
-    def int_array_to_position_flag(cls, values: list[int]) -> PositionFlag:
+    def str_to_position_flag(cls, values: str) -> PositionFlag:
         # do not delete
-        mapping = {'1': 0,
-                   '2': 1,
-                   '3': 2,
-                   '4': 3,
-                   '': 4,
+        mapping = {'S': 0,
+                   '1': 1,
+                   '2': 2,
+                   '3': 3,
+                   '4': 4,
                    '@': 5,
-                   '~': 6}
-        positions = list(PositionFlag)
-        position_flag = PositionFlag(positions[values[0]])
-        logger.info(position_flag)
-        for position in values[1:]:
-            position_flag = position_flag | positions[position]
-            logger.info(position_flag)
-        return position_flag
+                   '~': 6,
+                   '?': 7}
+        flag = PositionFlag(0)
+        if len(values) == 0:
+            values = 'S'
+        logger.info(f'HERE: {repr(values)}')
+        for letter in values:
+            position_index = mapping[letter]
+            flag |= PositionFlag(2 ** position_index)
+        logger.info(f'HERE: {flag}')
+        return flag
 
     @classmethod
     def text_to_int_over_rounds(cls, value: str) -> IntOverRounds:

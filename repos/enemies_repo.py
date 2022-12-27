@@ -1,4 +1,4 @@
-import logging
+import multiprocessing as mp
 import warnings
 from typing import Generator, Any
 
@@ -8,7 +8,7 @@ from model.enemy_model import EnemyModel
 from repos.daos.enemy_dao import EnemyDAO
 
 warnings.warn("File to be updated", DeprecationWarning)
-logger = logging.getLogger()
+logger = mp.get_logger()
 
 
 class EnamiesRepo:
@@ -21,7 +21,7 @@ class EnamiesRepo:
     @classmethod
     def add_resistances_to_enemy(cls, enemy: EnemyModel):
         for attrs in EnemyDAO.get_resistances(enemy):
-            resistance = EnemyFactory.get_resistance_factory_method(**attrs)
+            resistance = EnemyFactory.prepare_resistance(**attrs)
             logger.info(pretty(resistance))
             enemy.add_resistance(resistance)
         return cls

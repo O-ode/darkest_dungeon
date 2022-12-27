@@ -1,10 +1,7 @@
-import warnings
 from abc import ABC
 
 from base_classes.resistances import Trap, DeathBlow, Debuff, Disease, Bleed, Blight, Move, Stun
 from factories.value_modifying_factory import ValueModifyingFactory
-
-warnings.warn("File to be updated", DeprecationWarning)
 
 
 class ResistancesFactory(ABC):

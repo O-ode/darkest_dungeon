@@ -1,5 +1,7 @@
-from base_classes.character_attributes import Crit, Spd
-from base_classes.int_range import DmgRange
+import warnings
+
+from base_classes.armor_attributes import Dodge, Prot, HP
+from base_classes.common import Name
 from factories.value_modifying_factory import ValueModifyingFactory
 
 
@@ -7,16 +9,20 @@ class HeroArmorFactory:
 
     @classmethod
     def prepare_name(cls, value: str):
-        return value
+        warnings.warn("Method to be updated", DeprecationWarning)
+        return Name(value)
 
     @classmethod
-    def prepare_dmg(cls, value: str):
-        return DmgRange(*ValueModifyingFactory.text_to_int_range(value))
+    def prepare_dodge(cls, value: str):
+        warnings.warn("Method to be updated", DeprecationWarning)
+        return Dodge(ValueModifyingFactory.text_to_float_div_100(value))
 
     @classmethod
-    def prepare_crit(cls, value: str):
-        return Crit(ValueModifyingFactory.text_to_float_div_100(value))
+    def prepare_prot(cls, value: str):
+        warnings.warn("Method to be updated", DeprecationWarning)
+        return Prot(ValueModifyingFactory.text_to_float_div_100(value))
 
     @classmethod
-    def prepare_spd(cls, value: str):
-        return Spd(ValueModifyingFactory.text_to_int(value))
+    def prepare_hp(cls, value: str):
+        warnings.warn("Method to be updated", DeprecationWarning)
+        return HP(ValueModifyingFactory.text_to_int(value))

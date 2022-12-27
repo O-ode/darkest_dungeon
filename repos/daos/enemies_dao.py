@@ -1,6 +1,6 @@
-ENEMIES_LIST_URL = r"https://darkestdungeon.fandom.com/wiki/Enemies_(Darkest_Dungeon)"
-
 import warnings
+
+ENEMIES_LIST_URL = r"https://darkestdungeon.fandom.com/wiki/Enemies_(Darkest_Dungeon)"
 
 warnings.warn("File to be updated", DeprecationWarning)
 
