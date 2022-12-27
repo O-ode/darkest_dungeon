@@ -2,6 +2,7 @@ from typing import Any
 
 from base_classes.common import Name
 from base_classes.weapon_attributes import Dmg, Crit, Spd
+from constants import pretty
 from factories.hero_weapon_factory import HeroWeaponFactory
 
 
@@ -16,15 +17,19 @@ class Weapon:
 
     def set_name(self, value: Any):
         self._name = self._factory.prepare_name(value)
+        return self
 
     def set_dmg(self, value: Any):
         self._dmg = self._factory.prepare_dmg(value)
+        return self
 
     def set_crit(self, value: Any):
         self._crit = self._factory.prepare_crit(value)
+        return self
 
     def set_spd(self, value: Any):
         self._spd = self._factory.prepare_spd(value)
+        return self
 
     def get_name(self):
         return self._name
@@ -37,3 +42,6 @@ class Weapon:
 
     def get_spd(self):
         return self._spd
+
+    def __repr__(self):
+        return pretty(vars(self))

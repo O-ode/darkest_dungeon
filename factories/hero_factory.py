@@ -3,14 +3,18 @@ import re
 import warnings
 
 from base_classes.common import Name
-from constants import pretty, OpenQuotesEnum
+from constants import OpenQuotesEnum
 from factories.character_factory import CharacterFactory
+from factories.hero_armor_factory import HeroArmorFactory
 from factories.hero_camping_skill_factories import CampingSkillFactory
 from factories.hero_skill_factories import HeroSkillFactory
+from factories.hero_weapon_factory import HeroWeaponFactory
+from model.armor_model import Armor
 from model.skill.camping_skill import CampingSkill
 from model.skill.hero_combat_skills.hero_heal_combat_skill import HeroHealCombatSkill
 from model.skill.hero_combat_skills.hero_offensive_combat_skill import HeroOffensiveCombatSkill
 from model.skill.move_skill import MoveSkill
+from model.weapon_model import Weapon
 
 logger = mp.get_logger()
 
@@ -30,7 +34,7 @@ class HeroFactory(CharacterFactory):
 
     @classmethod
     def prepare_combat_skill(cls, str_attrs: str):
-        logger.debug(pretty(str_attrs))
+        # logger.debug(pretty(str_attrs))
         list_values = ['move', 'effect', 'heal']
         merge_into_effects = ['beast_effects', 'human_effects']
         skip = ['valid_modes', 'per_turn_limit', 'self_target_valid']
@@ -57,9 +61,6 @@ class HeroFactory(CharacterFactory):
                 buffered.append(letter)
             if len(buffered) > 0:
                 split.append(''.join(buffered))
-
-            # split = space_re.split(attr)
-            logger.debug(split)
 
             name = split[0]
             if name in skip:
@@ -138,7 +139,7 @@ class HeroFactory(CharacterFactory):
         if effect is None:
             effect = []
 
-        model = HeroHealCombatSkill(HeroSkillFactory) \
+        return HeroHealCombatSkill(HeroSkillFactory) \
             .set_name(id).set_level(level) \
             .set_launch(launch) \
             .set_heal(heal) \
@@ -147,7 +148,21 @@ class HeroFactory(CharacterFactory):
             .set_effects(effect) \
             .set_limit(per_battle_limit)
 
-        return model
+    @classmethod
+    def prepare_weapon(cls, name: str, dmg: list[str], crit: str, spd: str):
+        return Weapon(HeroWeaponFactory) \
+            .set_name(name) \
+            .set_dmg(dmg) \
+            .set_crit(crit) \
+            .set_spd(spd)
+
+    @classmethod
+    def prepare_armor(cls, name: str, hp: str, dodge: str):
+        # commented out parameters must stay in method definition
+        return Armor(HeroArmorFactory) \
+            .set_name(name) \
+            .set_hp(hp) \
+            .set_dodge(dodge)
 
     @classmethod
     def get_camping_skill(cls, skill_name: str, time_cost: str, target: str, description: str):

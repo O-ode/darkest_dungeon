@@ -22,6 +22,16 @@ class HeroDAO:
         return FileRepo.get_file_values_by_key('combat_skill', relative_path, file_name)
 
     @classmethod
+    def get_weapons(cls, hero: HeroModel):
+        relative_path, file_name = HERO_FILES[hero.get_name()]
+        return FileRepo.get_file_values_by_key('weapon', relative_path, file_name)
+
+    @classmethod
+    def get_armors(cls, hero: HeroModel):
+        relative_path, file_name = HERO_FILES[hero.get_name()]
+        return FileRepo.get_file_values_by_key('armour', relative_path, file_name)
+
+    @classmethod
     def get_camping_skills(cls, hero):
         warnings.warn("Method to be updated", DeprecationWarning)
         pass

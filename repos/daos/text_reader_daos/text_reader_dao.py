@@ -10,7 +10,6 @@ class TextReaderDao:
 
     @classmethod
     def extract_values_from_file(cls, file: FileClass) -> list[dict]:
-        logger.debug(f'Reading file: {file.get_absolute_path()}')
 
         with open(file.get_absolute_path(), 'r') as game_file:
             for line in game_file:

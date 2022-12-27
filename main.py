@@ -63,8 +63,9 @@ if __name__ == '__main__':
     for i, hero in enumerate(HeroesRepo.get_heroes(), start=1):
         logger.info(f'Hero nª {i}: {hero.get_name()}')
         HeroesRepo.add_resistances_to_hero(hero) \
-            .add_combat_skills_to_hero(hero)
-        logger.info(hero)
+            .add_combat_skills_to_hero(hero) \
+            .add_weapons_to_hero(hero) \
+            .add_armors_to_hero(hero)
 
         # logger.info(f'Character list:')
         # for c in characters:

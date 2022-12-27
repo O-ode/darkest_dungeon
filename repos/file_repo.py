@@ -47,13 +47,13 @@ class FileRepo:
             steps += 1
             index = len(arr) // 2
             current = arr[index]
-            logger.debug(f'step: {steps}, index: {index}, target_index: {target_index}, current: {current}, '
-                         f'target:{target}, arr: {arr[0]}..{arr[-1]}')
+            # logger.debug(f'step: {steps}, index: {index}, target_index: {target_index}, current: {current}, '
+            #              f'target:{target}, arr: {arr[0]}..{arr[-1]}')
 
             # stopping conditions
             if target == current:
                 target_index += index
-                logger.debug(f"Found target! {current}, steps given: {steps}")
+                # logger.debug(f"Found target! {current}, steps given: {steps}")
             elif arr[0] == arr[-1]:
                 if target > current:
                     target_index += 1

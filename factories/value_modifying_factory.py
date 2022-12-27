@@ -72,28 +72,20 @@ class ValueModifyingFactory:
         flag = 0
         if is_crit_valid:
             flag |= mapping['is_crit_valid']
-            logger.debug(flag)
         if is_continue_turn:
             flag |= mapping['is_continue_turn']
-            logger.debug(flag)
         if generation_guaranteed:
             flag |= mapping['generation_guaranteed']
-            logger.debug(flag)
         if ignore_guard:
             flag |= mapping['ignore_guard']
-            logger.debug(flag)
         if ignore_stealth:
             flag |= mapping['ignore_stealth']
-            logger.debug(flag)
         if ignore_protection:
             flag |= mapping['ignore_protection']
-            logger.debug(flag)
         if refresh_after_each_wave:
             flag |= mapping['refresh_after_each_wave']
-            logger.debug(flag)
         if is_stall_invalidating:
             flag |= mapping['is_stall_invalidating']
-            logger.debug(flag)
 
         return SkillBooleans(flag)
 
@@ -105,7 +97,6 @@ class ValueModifyingFactory:
 
     @classmethod
     def str_to_position_flag(cls, values: str) -> PositionFlag:
-        # do not delete
         mapping = {'S': 0,
                    '1': 1,
                    '2': 2,
@@ -117,11 +108,9 @@ class ValueModifyingFactory:
         flag = PositionFlag(0)
         if len(values) == 0:
             values = 'S'
-        logger.info(f'HERE: {repr(values)}')
         for letter in values:
             position_index = mapping[letter]
             flag |= PositionFlag(2 ** position_index)
-        logger.info(f'HERE: {flag}')
         return flag
 
     @classmethod

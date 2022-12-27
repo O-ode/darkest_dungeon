@@ -24,18 +24,6 @@ class HeroesRepo:
                 yield hero
 
     @classmethod
-    def add_level_attributes_to_hero(cls, hero: HeroModel):
-        warnings.warn("Method to be updated", DeprecationWarning)
-        pass
-
-    # for attrs in HeroDAO.get_level_attributes(hero):
-    #     model = HeroFactory.get_level_attributes_model(**attrs)
-    #     logger.info(pretty(model))
-    #
-    #     hero.add_levels_attrs(model)
-    # return cls
-
-    @classmethod
     def get_resistances_from_hero(cls, hero: HeroModel):
         if len(hero.get_resistances()) == 0:
             cls.add_resistances_to_hero(hero)
@@ -44,7 +32,6 @@ class HeroesRepo:
     @classmethod
     def add_resistances_to_hero(cls, hero: HeroModel):
         for attr_and_value in HeroDAO.get_resistances_for_hero(hero):
-            logger.debug(attr_and_value)
             name, value = tuple(space_re.split(attr_and_value))
             resistance = HeroFactory.prepare_resistance(name, value)
             logger.debug(pretty(resistance))
@@ -59,10 +46,61 @@ class HeroesRepo:
 
     @classmethod
     def add_combat_skills_to_hero(cls, hero: HeroModel):
-        for attr_and_value in HeroDAO.get_combat_skills(hero):
-            skill = HeroFactory.prepare_combat_skill(attr_and_value)
+        for str_attrs in HeroDAO.get_combat_skills(hero):
+            skill = HeroFactory.prepare_combat_skill(str_attrs)
             logger.info(f'{pretty(skill)}')
             hero.add_combat_skill(skill)
+        return cls
+
+    @classmethod
+    def get_armors_from_hero(cls, hero: HeroModel):
+        if len(hero.get_armors()) == 0:
+            cls.add_armors_to_hero(hero)
+        return hero.get_armors()
+
+    @classmethod
+    def add_armors_to_hero(cls, hero: HeroModel):
+        for str_attrs in HeroDAO.get_armors(hero):
+            dict_attrs = {}
+            for attr in str_attrs:
+                split = space_re.split(attr)
+                attr_name = split[0]
+                if attr_name not in ['name', 'def', 'hp']:
+                    continue
+                if attr_name == 'def':
+                    attr_name = 'dodge'
+                value = split[1]
+                dict_attrs[attr_name] = value
+
+            armor = HeroFactory.prepare_armor(**dict_attrs)
+            logger.info(f'{pretty(armor)}')
+            hero.add_armor(armor)
+        return cls
+
+    @classmethod
+    def get_weapons_from_hero(cls, hero: HeroModel):
+        if len(hero.get_weapons()) == 0:
+            cls.add_weapons_to_hero(hero)
+        return hero.get_weapons()
+
+    @classmethod
+    def add_weapons_to_hero(cls, hero: HeroModel):
+        for str_attrs in HeroDAO.get_weapons(hero):
+            dict_attrs = {}
+            for attr in str_attrs:
+                split = space_re.split(attr)
+                attr_name = split[0]
+                if attr_name not in ['name', 'dmg', 'crit', 'spd']:
+                    continue
+                elif attr_name == 'dmg':
+                    value = split[1:]
+                else:
+                    value = split[1]
+                dict_attrs[attr_name] = value
+
+            weapon = HeroFactory.prepare_weapon(**dict_attrs)
+            logger.info(f'{pretty(weapon)}')
+            hero.add_weapon(weapon)
         return cls
 
     @classmethod
