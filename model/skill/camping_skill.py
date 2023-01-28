@@ -1,7 +1,7 @@
 import warnings
 from typing import Type, Any
 
-from base_classes.common import Name
+from base_classes.basic_attribute import Name
 from base_classes.skill_attributes import Target, Effect, TimeCost
 from constants import pretty
 from factories.hero_camping_skill_factories import CampingSkillFactory

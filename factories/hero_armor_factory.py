@@ -1,7 +1,8 @@
 import re
 
-from base_classes.armor_attributes import Dodge, HP
-from base_classes.common import Name
+# from base_classes.basic_attribute import Name
+from base_classes.basic_attribute import Name
+from base_classes.stats_attributes import Dodge, HP
 from factories.value_modifying_factory import ValueModifyingFactory
 
 

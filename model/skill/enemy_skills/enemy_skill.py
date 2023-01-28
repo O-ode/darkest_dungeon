@@ -1,0 +1,2 @@
+class EnemySkill:
+    pass

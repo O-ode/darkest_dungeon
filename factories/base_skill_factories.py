@@ -1,4 +1,4 @@
-from base_classes.common import Name
+from base_classes.basic_attribute import Name
 from base_classes.skill_attributes import Limit, Launch, Target
 from factories.value_modifying_factory import ValueModifyingFactory
 

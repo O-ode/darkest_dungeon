@@ -2,7 +2,7 @@ import warnings
 from abc import ABC
 from typing import Any, Type
 
-from base_classes.common import Name
+from base_classes.basic_attribute import Name
 from base_classes.skill_attributes import Effect, Launch, Target, Level
 from constants import pretty
 from factories.type_vars import DerivedFromBaseSkillFactory

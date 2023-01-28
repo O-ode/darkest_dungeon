@@ -11,3 +11,7 @@ class Dodge(BasicAttribute):
 
 class Prot(BasicAttribute):
     pass
+
+
+class Spd(BasicAttribute):
+    pass

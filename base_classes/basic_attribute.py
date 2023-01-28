@@ -21,3 +21,8 @@ class BasicAttribute(ABC):
 
 class ResistanceBase(BasicAttribute):
     pass
+
+
+class Name(BasicAttribute):
+    pass
+

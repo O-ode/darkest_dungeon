@@ -1,4 +1,4 @@
-from base_classes.common import Name
+from base_classes.basic_attribute import Name
 
 DARKEST_ROOT_FOLDER = r'C:\Program Files (x86)\Steam\steamapps\common\DarkestDungeon'
 HERO_LIST = ['abomination', 'antiquarian', 'arbalest', 'bounty_hunter', 'crusader', 'grave_robber', 'hellion',

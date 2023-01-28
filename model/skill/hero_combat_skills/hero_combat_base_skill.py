@@ -1,7 +1,7 @@
 from abc import ABC
 from typing import Any, Type
 
-from base_classes.common import Name
+from base_classes.basic_attribute import Name
 from base_classes.skill_attributes import Effect, Limit, Launch, Target, Level
 from constants import SkillBooleans, pretty
 from factories.hero_skill_factories import HeroSkillFactory

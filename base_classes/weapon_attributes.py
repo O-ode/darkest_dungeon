@@ -8,7 +8,3 @@ class Dmg(DmgRange):
 
 class Crit(BasicAttribute):
     pass
-
-
-class Spd(BasicAttribute):
-    pass

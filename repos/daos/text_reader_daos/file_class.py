@@ -5,9 +5,9 @@ class FileClass:
     def __init__(self, relative_path: str, name: str):
         self._relative_path: str = relative_path
         self._name: str = name
-        self._file_values: list = []
+        self._file_values: list[tuple[str, dict[str, list[str]]]] = []
 
-    def get_file_values(self) -> list:
+    def get_file_values(self) -> list[tuple[str, dict[str, list[str]]]]:
         return self._file_values
 
     def get_relative_path(self) -> str:
@@ -19,8 +19,8 @@ class FileClass:
     def get_absolute_path(self):
         return '\\'.join([DARKEST_ROOT_FOLDER, self._relative_path, self._name])
 
-    def add_file_values(self, row_dict: dict):
-        self._file_values.append(row_dict)
+    def add_file_values(self, row_tuple: tuple[str, dict[str, list[str]]]):
+        self._file_values.append(row_tuple)
 
     def __eq__(self, other):
         if other is not None and isinstance(other, self.__class__):

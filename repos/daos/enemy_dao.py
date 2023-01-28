@@ -2,15 +2,22 @@ import multiprocessing as mp
 import warnings
 from typing import Any, Generator
 
-from model.enemy_model import EnemyModel
+from model.enemy_model import EnemyComposite
+from repos.file_repo import FileRepo
 
 warnings.warn("File to be updated", DeprecationWarning)
 logger = mp.get_logger()
 
 
 class EnemyDAO:
+
     @classmethod
-    def get_level_attributes(cls, enemy: EnemyModel) -> Generator[dict[str, str], Any, None]:
+    def get_all_enemies_names(cls) -> Generator[str, Any, None]:
+        for enemy_file in FileRepo.get_enemy_files():
+            yield enemy_file.get_name()
+
+    @classmethod
+    def get_level_attributes(cls, enemy: EnemyComposite) -> Generator[dict[str, str], Any, None]:
         pass
         # raw_attributes = \
         #     [[WebElementValueFactory.str_underscored_lower_from_inner_text(element) for element in elements_row]

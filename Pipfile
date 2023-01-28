@@ -4,8 +4,8 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-selenium = "*"
-webdriver-manager = "*"
+matplotlib = "*"
+numpy = "*"
 
 [dev-packages]
 
