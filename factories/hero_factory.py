@@ -2,7 +2,8 @@ import multiprocessing as mp
 import warnings
 from typing import Callable, Any
 
-from base_classes.hero_attributes import GenerationCondition
+from base_classes.character_attributes import OverstressedModifier, ActivityModifier
+from base_classes.hero_attributes import GenerationCondition, DeathsDoor
 from base_classes.hero_stats_composite import HeroStatsComposite
 from base_classes.skill_attributes import Effect
 from constants import pretty
@@ -37,10 +38,10 @@ class HeroFactory(AbstractCharacterCompositeFactory):
         return stats
 
     @classmethod
-    def prepare_combat_move_skill(cls, type: str, move: list[str]) -> MoveSkill:
+    def prepare_combat_move_skill(cls, value_type: str, move: list[str]) -> MoveSkill:
         skill = MoveSkill(HeroSkillFactory) \
             .set_move(move) \
-            .set_skill_type(type)
+            .set_skill_type(value_type)
         logger.info(f'{pretty(skill)}')
         return skill
 
@@ -58,11 +59,19 @@ class HeroFactory(AbstractCharacterCompositeFactory):
         return Effect(value)
 
     @classmethod
-    def prepare_deaths_door_effect(cls, value: str):
-        return Effect(value)
+    def prepare_deaths_door_effects(cls, buffs: list[str], recovery_buffs: list[str],
+                                    recovery_heart_attack_buffs: list[str],
+                                    enter_effects: list[str], enter_effect_round_cooldown: int):
+        buffs = [Effect(b) for b in buffs]
+        recovery_buffs = [Effect(r) for r in recovery_buffs]
+        recovery_heart_attack_buffs = [Effect(r) for r in recovery_heart_attack_buffs]
+        enter_effects = [Effect(e) for e in enter_effects]
+        return DeathsDoor(buffs, recovery_buffs, recovery_heart_attack_buffs,
+                          enter_effects, enter_effect_round_cooldown)
 
     @classmethod
-    def prepare_offensive_skill(cls, id: str, level: str, type: str, atk: str, dmg: str, crit: str, launch: str,
+    def prepare_offensive_skill(cls, value_id: str, level: str, value_type: str, atk: str, dmg: str, crit: str,
+                                launch: str,
                                 target: str, skill_booleans=None, effect=None, per_battle_limit: str = '0', move=None) \
             -> HeroOffensiveCombatSkill:
         if skill_booleans is None:
@@ -71,9 +80,9 @@ class HeroFactory(AbstractCharacterCompositeFactory):
             effect = []
 
         logger.debug('Preparing offensive skill')
-        model = HeroOffensiveCombatSkill(HeroSkillFactory).set_name(id) \
+        model = HeroOffensiveCombatSkill(HeroSkillFactory).set_name(value_id) \
             .set_level(level) \
-            .set_skill_type(type) \
+            .set_skill_type(value_type) \
             .set_acc(atk) \
             .set_dmg_mod(dmg) \
             .set_crit_mod(crit) \
@@ -89,7 +98,8 @@ class HeroFactory(AbstractCharacterCompositeFactory):
         return model
 
     @classmethod
-    def prepare_healing_skill(cls, id: str, level: str, launch: str, heal: list[str], target: str, skill_booleans=None,
+    def prepare_healing_skill(cls, value_id: str, level: str, launch: str, heal: list[str], target: str,
+                              skill_booleans=None,
                               effect=None, per_battle_limit: str = '0') \
             -> HeroHealCombatSkill:
         if skill_booleans is None:
@@ -98,7 +108,7 @@ class HeroFactory(AbstractCharacterCompositeFactory):
             effect = []
 
         return HeroHealCombatSkill(HeroSkillFactory) \
-            .set_name(id).set_level(level) \
+            .set_name(value_id).set_level(level) \
             .set_launch(launch) \
             .set_heal(heal) \
             .set_target(target) \
@@ -140,6 +150,18 @@ class HeroFactory(AbstractCharacterCompositeFactory):
         return GenerationCondition(factory_method) \
             .set_name(name) \
             .set_value(value)
+
+    @classmethod
+    def prepare_overstressed_modifier(cls, override_trait_type_ids: list[str],
+                                      override_trait_type_chances: list[float]):
+        return OverstressedModifier(override_trait_type_ids, override_trait_type_chances)
+        º
+
+    @classmethod
+    def activity_modifier(cls, override_valid_activity_ids: list[str], override_stress_removal_amount_low: int,
+                          override_stress_removal_amount_high: int):
+        return ActivityModifier(override_valid_activity_ids, override_stress_removal_amount_low,
+                                override_stress_removal_amount_high)
 
     @classmethod
     def get_camping_skill(cls, skill_name: str, time_cost: str, target: str, description: str):

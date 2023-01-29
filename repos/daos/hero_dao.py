@@ -34,10 +34,13 @@ class HeroDAO:
         relative_path, file_name = HERO_FILES[hero.get_name()]
         skill_attrs = next(FileRepo.get_file_values_by_key('combat_move_skill', relative_path, file_name))
         list_values = ['move']
-        attr_filter = ['type', 'move']
+        name_alterations = {'type': 'value_type'}
+        attr_filter = ['value_type', 'move']
 
         transformed_attrs = {}
         for name, value in skill_attrs.items():
+            if name in name_alterations:
+                name = name_alterations[name]
             if name in attr_filter:
                 if name not in list_values:
                     value = value[0]
@@ -54,11 +57,14 @@ class HeroDAO:
         skill_boolean_names = ['is_crit_valid', 'is_continue_turn', 'is_stall_invalidating', 'refresh_after_each_wave',
                                'ignore_stealth', 'self_target_valid', 'generation_guaranteed', 'ignore_protection',
                                'ignore_guard']
+        name_alterations = {'id': 'value_id', 'type': 'value_type'}
         relative_path, file_name = HERO_FILES[hero.get_name()]
         for skill_attrs in FileRepo.get_file_values_by_key('combat_skill', relative_path, file_name):
             skill_booleans = {}
             transformed_attrs = {}
             for name, value in skill_attrs.items():
+                if name in name_alterations:
+                    name = name_alterations[name]
                 if name in skip:
                     continue
                 elif name in skill_boolean_names:

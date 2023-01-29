@@ -4,6 +4,7 @@ from typing import Generator, Any
 
 from constants import pretty
 from factories.hero_factory import HeroFactory
+from model.hero_composites import hero_class_map
 from model.hero_model import HeroComposite
 from repos.daos.hero_dao import HeroDAO
 from repos.daos.text_reader_daos.constants import HERO_LIST
@@ -119,7 +120,6 @@ class HeroesRepo:
         #     pass
         # return cls
 
-
     # @classmethod
     # def add_weapons_to_hero(cls, hero: HeroComposite):
     #     logger.info(f'Adding weapons to hero: {hero.get_name()}')
@@ -152,7 +152,8 @@ class HeroesRepo:
         if len(cls.heroes) == 0:
             logger.info(f'Generating all heroes by name')
             for name in HERO_LIST:
-                hero = HeroComposite(HeroFactory) \
+                hero_class = hero_class_map[name]
+                hero = hero_class(HeroFactory) \
                     .set_name(name)
                 cls.heroes.append(hero)
                 yield hero

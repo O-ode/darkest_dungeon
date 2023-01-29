@@ -2,6 +2,7 @@ from typing import Any, Callable
 
 from base_classes.basic_attribute import BasicAttribute
 from base_classes.basic_attribute import Name
+from base_classes.skill_attributes import Effect
 
 
 class Quirk(BasicAttribute):
@@ -10,6 +11,16 @@ class Quirk(BasicAttribute):
 
 class ResolveLevel(BasicAttribute):
     pass
+
+
+class DeathsDoor:
+    def __init__(self, buffs: list[Effect], recovery_buffs: list[Effect], recovery_heart_attack_buffs: list[Effect],
+                 enter_effects: list[Effect], enter_effect_round_cooldown: int):
+        self.buffs = buffs
+        self.recovery_buffs = recovery_buffs
+        self.recovery_heart_attack_buffs = recovery_heart_attack_buffs
+        self.enter_effects = enter_effects
+        self.enter_effect_round_cooldown = enter_effect_round_cooldown
 
 
 class GenerationCondition:
