@@ -2,7 +2,7 @@ import multiprocessing as mp
 import warnings
 from typing import Any, Generator
 
-from model.enemy_model import EnemyComposite
+from composites.enemy_composite import EnemyComposite
 from repos.file_repo import FileRepo
 
 warnings.warn("File to be updated", DeprecationWarning)

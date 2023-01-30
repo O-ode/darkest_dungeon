@@ -23,7 +23,8 @@ class FlagellantFactory(HeroFactory):
         return HPReaction(hp_ratio, is_under, effects)
 
     @classmethod
-    def prepare_overstressed_modifier(cls, override_trait_type_ids: str, override_trait_type_chances: float):
+    def prepare_overstressed_modifier(cls, override_trait_type_ids: list[str],
+                                      override_trait_type_chances: list[float]):
         return OverstressedModifier(override_trait_type_ids, override_trait_type_chances)
 
     @classmethod

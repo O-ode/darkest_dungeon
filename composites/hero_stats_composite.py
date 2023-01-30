@@ -1,5 +1,5 @@
 from base_classes.stats_attributes import HP, Spd, Dodge
-from base_classes.stats_composite import StatsBaseComposite
+from composites.stats_composite import StatsBaseComposite
 from base_classes.weapon_attributes import Dmg, Crit
 from factories.hero_armor_factory import HeroArmorFactory
 from factories.hero_weapon_factory import HeroWeaponFactory

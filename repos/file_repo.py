@@ -51,9 +51,9 @@ class FileRepo:
                 yield row_values
 
     @classmethod
-    def find_in_list_merge_recursively(cls, a_list: list, a_target: Any, **kwargs) -> tuple[Any or None, int]:
+    def find_in_list_merge_recursively(cls, a_list: list, a_target: Any, **kwargs) -> tuple[Any, int]:
 
-        def _find_in_list_merge_recursively(arr: list, target: Any, steps=0, target_index=0) -> tuple[Any or None, int]:
+        def _find_in_list_merge_recursively(arr: list, target: Any, steps=0, target_index=0) -> tuple[Any, int]:
             steps += 1
             index = len(arr) // 2
             current = arr[index]

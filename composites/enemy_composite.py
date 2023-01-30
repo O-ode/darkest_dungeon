@@ -2,14 +2,15 @@ from typing import Type, Any
 
 from base_classes.enemy_attributes import Size, Loot, DeathClass, BattleModifier, MonsterBrain, Initiative
 from base_classes.stats_attributes import Spd
-from base_classes.type_vars import CombatSkillType, StatsType
+from composites.character_composite import CharacterComposite
+from composites.enemy_stats_composite import EnemyStatsComposite
 from factories.enemy_factory import EnemyFactory
-from model.character_model import CharacterComposite
+from model.skill.typevars import CombatSkillType
 
 
 class EnemyComposite(CharacterComposite):
 
-    def get_stats(self) -> list[StatsType]:
+    def get_stats(self) -> list[EnemyStatsComposite]:
         pass
 
     def get_combat_skills(self) -> list[CombatSkillType]:

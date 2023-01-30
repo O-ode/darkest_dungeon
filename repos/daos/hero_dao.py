@@ -1,19 +1,20 @@
 import multiprocessing as mp
 import re
 
-from model.hero_model import HeroComposite
+from composites.hero_composite import HeroComposite
+from repos.daos.character_dao import CharacterDAO
 from repos.daos.text_reader_daos.constants import HERO_FILES
 from repos.file_repo import FileRepo
 
 logger = mp.get_logger()
 
 
-class HeroDAO:
+class HeroDAO(CharacterDAO):
 
     @classmethod
     def get_armors(cls, hero: HeroComposite):
         # logger.info(f'Getting armors for hero: {hero.get_name()}')
-        relative_path, file_name = HERO_FILES[hero.get_name()]
+        relative_path, file_name = HERO_FILES[hero.get_name().value]
         for armor_attrs in FileRepo.get_file_values_by_key('armour', relative_path, file_name):
             attr_filter = ['armor_name', 'dodge', 'hp']
             name_alterations = {'def': 'dodge', 'name': 'armor_name'}
@@ -31,7 +32,7 @@ class HeroDAO:
     @classmethod
     def get_combat_move_skill(cls, hero: HeroComposite):
         # logger.info(f'Getting combat move skill for hero: {hero.get_name()}')
-        relative_path, file_name = HERO_FILES[hero.get_name()]
+        relative_path, file_name = HERO_FILES[hero.get_name().value]
         skill_attrs = next(FileRepo.get_file_values_by_key('combat_move_skill', relative_path, file_name))
         list_values = ['move']
         name_alterations = {'type': 'value_type'}
@@ -58,7 +59,7 @@ class HeroDAO:
                                'ignore_stealth', 'self_target_valid', 'generation_guaranteed', 'ignore_protection',
                                'ignore_guard']
         name_alterations = {'id': 'value_id', 'type': 'value_type'}
-        relative_path, file_name = HERO_FILES[hero.get_name()]
+        relative_path, file_name = HERO_FILES[hero.get_name().value]
         for skill_attrs in FileRepo.get_file_values_by_key('combat_skill', relative_path, file_name):
             skill_booleans = {}
             transformed_attrs = {}
@@ -97,21 +98,22 @@ class HeroDAO:
     @classmethod
     def get_crit_effects(cls, hero: HeroComposite):
         # logger.info(f'Getting crit effects for hero: {hero.get_name()}')
-        relative_path, file_name = HERO_FILES[hero.get_name()]
+        relative_path, file_name = HERO_FILES[hero.get_name().value]
         crit_attrs = next(FileRepo.get_file_values_by_key('crit', relative_path, file_name))
         return crit_attrs
 
     @classmethod
     def get_deaths_door_effects(cls, hero: HeroComposite):
         # logger.info(f'Getting death\'s door effects for hero: {hero.get_name()}')
-        relative_path, file_name = HERO_FILES[hero.get_name()]
-        crit_attrs = next(FileRepo.get_file_values_by_key('deaths_door', relative_path, file_name))
-        return crit_attrs
+        relative_path, file_name = HERO_FILES[hero.get_name().value]
+        deaths_door_attrs = next(FileRepo.get_file_values_by_key('deaths_door', relative_path, file_name))
+        logger.info(f'DEATHS DOOR {deaths_door_attrs}')
+        return deaths_door_attrs
 
     @classmethod
     def get_generation_conditions(cls, hero: HeroComposite):
         # logger.info(f'Getting generation conditions for hero: {hero.get_name()}')
-        relative_path, file_name = HERO_FILES[hero.get_name()]
+        relative_path, file_name = HERO_FILES[hero.get_name().value]
         gen_attrs = next(FileRepo.get_file_values_by_key('generation', relative_path, file_name))
         for k, v in gen_attrs.items():
             yield k, v[0]
@@ -119,7 +121,7 @@ class HeroDAO:
     @classmethod
     def get_resistances(cls, hero: HeroComposite):
         # logger.info(f'Getting resistances for hero: {hero.get_name()}')
-        relative_path, file_name = HERO_FILES[hero.get_name()]
+        relative_path, file_name = HERO_FILES[hero.get_name().value]
         res_dict = next(FileRepo.get_file_values_by_key('resistances', relative_path, file_name))
         for name, value_list in res_dict.items():
             yield name, value_list[0]
@@ -127,7 +129,7 @@ class HeroDAO:
     @classmethod
     def get_tags(cls, hero: HeroComposite):
         # logger.info(f'Getting tags for hero: {hero.get_name()}')
-        relative_path, file_name = HERO_FILES[hero.get_name()]
+        relative_path, file_name = HERO_FILES[hero.get_name().value]
         for tag_attrs in FileRepo.get_file_values_by_key('tag', relative_path, file_name):
             transformed_attrs = {}
             for k, v in tag_attrs.items():
@@ -148,7 +150,7 @@ class HeroDAO:
     @classmethod
     def get_weapons(cls, hero: HeroComposite):
         # logger.info(f'Getting weapons for hero: {hero.get_name()}')
-        relative_path, file_name = HERO_FILES[hero.get_name()]
+        relative_path, file_name = HERO_FILES[hero.get_name().value]
         for wpn_attrs in FileRepo.get_file_values_by_key('weapon', relative_path, file_name):
             attr_filter = ['weapon_name', 'dmg', 'crit', 'spd']
             name_alterations = {'name': 'weapon_name'}

@@ -2,8 +2,10 @@ from typing import Type, Any
 
 from base_classes.character_attributes import OverstressedModifier, HPReaction, DeathReaction, \
     QuirkModifier, IncompatiblePartyMember, ActivityModifier
+from builders.flagellant_builder import FlagellantBuilder
+from builders.hero_builder import HeroBuilder
+from composites.hero_composite import HeroComposite
 from factories.hero_factories.flagellant_factory import FlagellantFactory
-from model.hero_model import HeroComposite
 
 
 class Abomination(HeroComposite):
@@ -118,9 +120,8 @@ class Flagellant(HeroComposite):
     def get_incompatible_party_member(self):
         return self._incompatible_party_member
 
-
-hero_class_map = {'abomination': Abomination, 'antiquarian': Antiquarian, 'arbalest': Arbalest,
-                  'bounty_hunter': BountyHunter, 'crusader': Crusader, 'grave_robber': GraveRobber, 'hellion': Hellion,
-                  'highwayman': Highwayman, 'houndmaster': Houndmaster, 'jester': Jester, 'leper': Leper,
-                  'man_at_arms': ManAtArms, 'occultist': Occultist, 'plague_doctor': PlagueDoctor, 'vestal': Vestal,
-                  'flagellant': Flagellant}
+hero_builder_map = {'Abomination': HeroBuilder, 'Antiquarian': HeroBuilder, 'Arbalest': HeroBuilder,
+                    'BountyHunter': HeroBuilder, 'Crusader': HeroBuilder, 'GraveRobber': HeroBuilder,
+                    'Hellion': HeroBuilder, 'Highwayman': HeroBuilder, 'Houndmaster': HeroBuilder,
+                    'Jester': HeroBuilder, 'Leper': HeroBuilder, 'ManAtArms': HeroBuilder, 'Occultist': HeroBuilder,
+                    'PlagueDoctor': HeroBuilder, 'Vestal': HeroBuilder, 'Flagellant': FlagellantBuilder}

@@ -1,11 +1,17 @@
 from abc import ABC, abstractmethod
-from typing import Type, Any
+from typing import Type, TypeVar
 
-from base_classes.character_attributes import Tag
 from base_classes.basic_attribute import Name
-from base_classes.type_vars import ResistanceType, StatsType, CombatSkillType
+from base_classes.character_attributes import Tag
+from base_classes.type_vars import ResistanceType
+from composites.enemy_stats_composite import EnemyStatsComposite
+from composites.hero_stats_composite import HeroStatsComposite
+# from composites.typevars import StatsType
 from constants import pretty
 from factories.type_vars import CharacterFactories
+from model.skill.typevars import CombatSkillType
+
+StatsType = TypeVar("StatsType", HeroStatsComposite, EnemyStatsComposite)
 
 
 class CharacterComposite(ABC):
@@ -13,7 +19,7 @@ class CharacterComposite(ABC):
     def __init__(self, factory: Type[CharacterFactories]):
         # Single valued base attributes
         self._factory: Type[CharacterFactories] = factory
-        self._class_name: Name or None = None
+        # self._class_name: Name or None = None
 
         # Base list attributes
         self._resistances: list[ResistanceType] = []
@@ -22,10 +28,6 @@ class CharacterComposite(ABC):
         # Base list attributes depending on child class
         self._stats: list[StatsType] = []
         self._combat_skills: list[CombatSkillType] = []
-
-    def set_name(self, value: Any):
-        self._class_name = self._factory.prepare_name(value)
-        return self
 
     def add_stats(self, **stats_attrs):
         self._stats.append(self._factory.prepare_stats(**stats_attrs))
@@ -55,7 +57,7 @@ class CharacterComposite(ABC):
         return self._tags
 
     def get_name(self) -> Name:
-        return self._class_name
+        return Name(self.__class__.__name__)
 
     def get_resistances(self) -> list[ResistanceType]:
         return self._resistances

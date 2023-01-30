@@ -3,8 +3,8 @@ import multiprocessing as mp
 import matplotlib.pyplot as plt
 from matplotlib import ticker
 
+from composites.hero_composite import HeroComposite
 from constants import pretty
-from model.hero_model import HeroComposite
 
 logger = mp.get_logger()
 

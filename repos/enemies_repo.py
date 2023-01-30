@@ -1,8 +1,8 @@
 import multiprocessing as mp
 import warnings
 
+from composites.enemy_composite import EnemyComposite
 from factories.enemy_factory import EnemyFactory
-from model.enemy_model import EnemyComposite
 from repos.daos.enemy_dao import EnemyDAO
 
 warnings.warn("File to be updated", DeprecationWarning)

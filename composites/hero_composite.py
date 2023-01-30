@@ -1,13 +1,14 @@
 import multiprocessing as mp
 from typing import Type, Any
 
+
 from base_classes.hero_attributes import Quirk, GenerationCondition, DeathsDoor
-from base_classes.hero_stats_composite import HeroStatsComposite
 from base_classes.skill_attributes import Effect
 from base_classes.type_vars import ResistanceType
+from composites.character_composite import CharacterComposite
+from composites.hero_stats_composite import HeroStatsComposite
 from factories.hero_factory import HeroFactory
 from factories.type_vars import HeroFactoryType
-from model.character_model import CharacterComposite
 from model.skill.camping_skill import CampingSkill
 from model.skill.hero_combat_skills.type_vars import HeroCombatSkillTypes
 from model.skill.move_skill import MoveSkill
@@ -74,13 +75,9 @@ class HeroComposite(CharacterComposite):
     #     # self._combat_skills.append(skill)
     #     return self
 
-    def add_quirk_modifier(self, value: Any):
-        pass
-        # self._quirk_modifiers.append(HeroFactory)
-        # return self
-
-    def add_deaths_door_effect(self, value: Any):
-        self._deaths_door_effects.append(HeroFactory.prepare_deaths_door_effects(*value))
+    def set_deaths_door_effect(self, value: Any):
+        logger.info(f'DEATHS DOOR EFFECTS: {value}')
+        self._deaths_door_effects = HeroFactory.prepare_deaths_door_effects(**value)
         return self
 
     def add_crit_effect(self, value: str):
@@ -108,4 +105,4 @@ class HeroComposite(CharacterComposite):
         return self
 
     def __repr__(self):
-        return str(vars(self))
+        return f'{self.__class__.__name__}: {str(vars(self))}'

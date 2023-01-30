@@ -29,15 +29,15 @@ def setup_logger():
 if __name__ == '__main__':
     logger = setup_logger()
     for i, hero in enumerate(HeroesRepo.get_heroes(), start=1):
-        logger.info(f'Hero nª {i}: {hero.get_name()}')
-        HeroesRepo.add_resistances_to_hero(hero) \
-            .add_crit_effects_to_hero(hero) \
-            .add_stats_to_hero(hero) \
-            .add_combat_skills_to_hero(hero) \
-            .add_combat_move_skill_to_hero(hero) \
-            .add_tags_to_hero(hero) \
-            .add_deaths_door_effects_to_hero(hero) \
-            .add_generation_conditions_to_hero(hero)
+        logger.info(f'Hero nª {i}: {hero}')
+        # HeroesRepo.add_resistances_to_hero(hero) \
+        #     .add_crit_effects_to_hero(hero) \
+        #     .add_stats_to_hero(hero) \
+        #     .add_combat_skills_to_hero(hero) \
+        #     .add_combat_move_skill_to_hero(hero) \
+        #     .add_tags_to_hero(hero) \
+        #     .add_deaths_door_effects_to_hero(hero) \
+        #     .add_generation_conditions_to_hero(hero)
 
         # HeroesRepo.add_camping_skills_to_hero(hero)
 

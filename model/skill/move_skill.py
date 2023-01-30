@@ -1,7 +1,7 @@
 from typing import Any
 
 from base_classes.skill_attributes import Move
-from constants import SkillTypeEnum
+from constants import SkillTypeEnum, pretty
 from factories.hero_skill_factories import HeroSkillFactory
 
 
@@ -19,3 +19,6 @@ class MoveSkill:
     def set_skill_type(self, value: Any):
         self._skill_type = self._factory.prepare_skill_type(value)
         return self
+
+    def __repr__(self):
+        return f'{self.__class__.__name__}: {pretty(vars(self))}'

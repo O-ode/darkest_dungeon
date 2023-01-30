@@ -3,6 +3,7 @@ from typing import Any, Callable
 from base_classes.basic_attribute import BasicAttribute
 from base_classes.basic_attribute import Name
 from base_classes.skill_attributes import Effect
+from constants import pretty
 
 
 class Quirk(BasicAttribute):
@@ -21,6 +22,9 @@ class DeathsDoor:
         self.recovery_heart_attack_buffs = recovery_heart_attack_buffs
         self.enter_effects = enter_effects
         self.enter_effect_round_cooldown = enter_effect_round_cooldown
+
+    def __repr__(self):
+        return f'{self.__class__.__name__}: {pretty(vars(self))}'
 
 
 class GenerationCondition:
@@ -43,3 +47,6 @@ class GenerationCondition:
 
     def get_value(self):
         return self._value
+
+    def __repr__(self):
+        return f'{self.__class__.__name__}: {pretty(vars(self))}'

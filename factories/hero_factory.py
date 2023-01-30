@@ -4,7 +4,7 @@ from typing import Callable, Any
 
 from base_classes.character_attributes import OverstressedModifier, ActivityModifier
 from base_classes.hero_attributes import GenerationCondition, DeathsDoor
-from base_classes.hero_stats_composite import HeroStatsComposite
+from composites.hero_stats_composite import HeroStatsComposite
 from base_classes.skill_attributes import Effect
 from constants import pretty
 from factories.abstract_character_composite_factory import AbstractCharacterCompositeFactory
@@ -61,11 +61,11 @@ class HeroFactory(AbstractCharacterCompositeFactory):
     @classmethod
     def prepare_deaths_door_effects(cls, buffs: list[str], recovery_buffs: list[str],
                                     recovery_heart_attack_buffs: list[str],
-                                    enter_effects: list[str], enter_effect_round_cooldown: int):
+                                    enter_effects: list[str] = None, enter_effect_round_cooldown: int = 0):
         buffs = [Effect(b) for b in buffs]
         recovery_buffs = [Effect(r) for r in recovery_buffs]
         recovery_heart_attack_buffs = [Effect(r) for r in recovery_heart_attack_buffs]
-        enter_effects = [Effect(e) for e in enter_effects]
+        enter_effects = [Effect(e) for e in enter_effects] if enter_effects is not None else []
         return DeathsDoor(buffs, recovery_buffs, recovery_heart_attack_buffs,
                           enter_effects, enter_effect_round_cooldown)
 
@@ -155,7 +155,6 @@ class HeroFactory(AbstractCharacterCompositeFactory):
     def prepare_overstressed_modifier(cls, override_trait_type_ids: list[str],
                                       override_trait_type_chances: list[float]):
         return OverstressedModifier(override_trait_type_ids, override_trait_type_chances)
-        º
 
     @classmethod
     def activity_modifier(cls, override_valid_activity_ids: list[str], override_stress_removal_amount_low: int,

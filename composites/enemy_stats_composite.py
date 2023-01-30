@@ -1,7 +1,7 @@
 from typing import Any
 
 from base_classes.stats_attributes import Dodge, Prot, Spd, HP
-from base_classes.stats_composite import StatsBaseComposite
+from composites.stats_composite import StatsBaseComposite
 from factories.enemy_factory import EnemyFactory
 
 
